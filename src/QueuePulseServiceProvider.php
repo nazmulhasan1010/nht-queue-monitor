@@ -1,6 +1,6 @@
 <?php
 
-namespace QueueMonitor;
+namespace NHT\QueueMonitor;
 
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Queue\Events\JobProcessed;
