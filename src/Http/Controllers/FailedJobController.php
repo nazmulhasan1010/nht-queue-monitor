@@ -5,6 +5,7 @@ namespace NHT\QueueMonitor\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\View\View;
 use NHT\QueueMonitor\Actions\RetryAllFailedJobs;
 use NHT\QueueMonitor\Actions\RetryFailedJob;
 use NHT\QueueMonitor\Services\EventLogger;
@@ -13,6 +14,11 @@ use NHT\QueueMonitor\Services\QueueMonitorNotifier;
 
 class FailedJobController extends Controller
 {
+    /**
+     * @param Request $request
+     * @param FailedJobService $svc
+     * @return View
+     */
     public function index(Request $request, FailedJobService $svc)
     {
         $filters = [
@@ -31,10 +37,14 @@ class FailedJobController extends Controller
         ]);
     }
 
+    /**
+     * @param int|string $id
+     * @param FailedJobService $failedJobService
+     * @return View
+     */
     public function show(int|string $id, FailedJobService $failedJobService)
     {
         $job = $failedJobService->findOrFail($id);
-
         return view('queue-monitor::job-detail', [
             'job' => $job,
             'payload' => $failedJobService->decodePayload($job),
@@ -45,6 +55,14 @@ class FailedJobController extends Controller
         ]);
     }
 
+    /**
+     * @param int|string $id
+     * @param RetryFailedJob $retryFailedJob
+     * @param FailedJobService $svc
+     * @param EventLogger $logger
+     * @param QueueMonitorNotifier $notifier
+     * @return RedirectResponse
+     */
     public function retry(int|string $id, RetryFailedJob $retryFailedJob, FailedJobService $svc, EventLogger $logger, QueueMonitorNotifier $notifier): RedirectResponse
     {
         abort_unless(config('queue-monitor.allow_retry', true), 403);
@@ -53,7 +71,7 @@ class FailedJobController extends Controller
         $retryFailedJob->execute($id);
 
         $logger->log('job_retried', [
-            'job_id' => (string) $id,
+            'job_id' => (string)$id,
             'queue' => $job->queue ?? null,
             'connection' => $job->connection ?? null,
             'job_name' => $job ? $svc->jobName($job) : null,
@@ -61,9 +79,15 @@ class FailedJobController extends Controller
 
         $notifier->notify('Queue Pulse: Job Retried', "Failed job #{$id} retry command executed.", ['job_id' => $id]);
 
-        return back()->with('queue_pulse_success', 'Failed job retry command executed.');
+        return back()->with('queue_monitor_success', 'Failed job retry command executed.');
     }
 
+    /**
+     * @param RetryAllFailedJobs $retryAllFailedJobs
+     * @param EventLogger $logger
+     * @param QueueMonitorNotifier $notifier
+     * @return RedirectResponse
+     */
     public function retryAll(RetryAllFailedJobs $retryAllFailedJobs, EventLogger $logger, QueueMonitorNotifier $notifier): RedirectResponse
     {
         abort_unless(config('queue-monitor.allow_retry', true), 403);
@@ -73,9 +97,15 @@ class FailedJobController extends Controller
         $logger->log('all_jobs_retried');
         $notifier->notify('Queue Pulse: Retry All', 'Retry all failed jobs command executed.');
 
-        return back()->with('queue_pulse_success', 'Retry all command executed.');
+        return back()->with('queue_monitor_success', 'Retry all command executed.');
     }
 
+    /**
+     * @param int|string $id
+     * @param FailedJobService $svc
+     * @param EventLogger $logger
+     * @return RedirectResponse
+     */
     public function destroy(int|string $id, FailedJobService $svc, EventLogger $logger): RedirectResponse
     {
         abort_unless(config('queue-monitor.allow_delete', true), 403);
@@ -83,7 +113,7 @@ class FailedJobController extends Controller
         $job = $svc->find($id);
 
         $logger->log('job_deleted', [
-            'job_id' => (string) $id,
+            'job_id' => (string)$id,
             'queue' => $job->queue ?? null,
             'connection' => $job->connection ?? null,
             'job_name' => $job ? $svc->jobName($job) : null,
@@ -91,23 +121,34 @@ class FailedJobController extends Controller
 
         $svc->delete($id);
 
-        return redirect()->route('queue-monitor.failed.index')->with('queue_pulse_success', 'Failed job deleted successfully.');
+        return redirect()->route('queue-monitor.failed.index')->with('queue_monitor_success', 'Failed job deleted successfully.');
     }
 
+    /**
+     * @param Request $request
+     * @param FailedJobService $svc
+     * @param EventLogger $logger
+     * @return RedirectResponse
+     */
     public function bulkDestroy(Request $request, FailedJobService $svc, EventLogger $logger): RedirectResponse
     {
         abort_unless(config('queue-monitor.allow_bulk_delete', true), 403);
 
-        $ids = (array) $request->input('ids', []);
+        $ids = (array)$request->input('ids', []);
         $deleted = $svc->bulkDelete($ids);
 
         $logger->log('bulk_jobs_deleted', [
             'meta' => ['ids' => $ids, 'deleted' => $deleted],
         ]);
 
-        return back()->with('queue_pulse_success', "{$deleted} failed job(s) deleted successfully.");
+        return back()->with('queue_monitor_success', "{$deleted} failed job(s) deleted successfully.");
     }
 
+    /**
+     * @param FailedJobService $svc
+     * @param EventLogger $logger
+     * @return RedirectResponse
+     */
     public function clear(FailedJobService $svc, EventLogger $logger): RedirectResponse
     {
         abort_unless(config('queue-monitor.allow_clear', true), 403);
@@ -115,6 +156,6 @@ class FailedJobController extends Controller
         $svc->clear();
         $logger->log('all_jobs_cleared');
 
-        return redirect()->route('queue-monitor.failed.index')->with('queue_pulse_success', 'All failed jobs cleared successfully.');
+        return redirect()->route('queue-monitor.failed.index')->with('queue_monitor_success', 'All failed jobs cleared successfully.');
     }
 }

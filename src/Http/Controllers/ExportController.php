@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportController extends Controller
 {
+    /**
+     * @return StreamedResponse
+     */
     public function failedJobs(): StreamedResponse
     {
         abort_unless(config('queue-monitor.allow_export', true), 403);
@@ -36,6 +39,9 @@ class ExportController extends Controller
         }, 'queue-monitor-failed-jobs.csv');
     }
 
+    /**
+     * @return StreamedResponse
+     */
     public function events(): StreamedResponse
     {
         abort_unless(config('queue-monitor.allow_export', true), 403);

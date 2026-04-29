@@ -1,35 +1,188 @@
 @extends('queue-monitor::layout')
 
 @section('content')
-<div class="qp-header">
-    <div>
-        <h1 class="qp-title">Failed Jobs</h1>
-        <p class="qp-subtitle">Filter, search, inspect, retry, delete, and export failed jobs.</p>
-    </div>
+    <div class="qp-header">
+        <div>
+            <h1 class="qp-title">Failed Jobs</h1>
+            <p class="qp-subtitle">Filter, search, inspect, retry and delete failed jobs</p>
+        </div>
 
-    <div class="qp-actions">
-        @if(config('queue-monitor.allow_export', true))
-            <a class="qp-btn" href="{{ route('queue-monitor.exports.failed-jobs') }}">Export CSV</a>
-        @endif
-
-        @if(config('queue-monitor.allow_retry', true))
-            <form method="POST" action="{{ route('queue-monitor.failed.retry-all') }}" data-qp-danger-form data-confirm-phrase="RETRY ALL">
+        <div class="qp-actions">
+            <form method="POST" action="{{ route('queue-monitor.failed.retry-all') }}"
+                  onsubmit="return confirm('Retry all failed jobs?');">
                 @csrf
-                <button class="qp-btn" type="submit">Retry All</button>
+                <button type="submit" class="qp-btn">Retry All</button>
             </form>
-        @endif
 
-        @if(config('queue-monitor.allow_clear', true))
-            <form method="POST" action="{{ route('queue-monitor.failed.clear') }}" data-qp-danger-form data-confirm-phrase="CLEAR ALL">
+            <form method="POST" action="{{ route('queue-monitor.failed.clear') }}"
+                  onsubmit="return confirm('Clear all failed jobs? This cannot be undone.');">
                 @csrf
                 @method('DELETE')
-                <button class="qp-btn qp-btn-danger" type="submit">Clear All</button>
+                <button type="submit" class="qp-btn qp-btn-danger">Clear All</button>
             </form>
-        @endif
+        </div>
     </div>
-</div>
 
-<div class="qp-card">
-    <p class="qp-subtitle">Phase 6 override: keep your Phase 4 table/filter body below this header if needed.</p>
-</div>
+    <form method="GET" class="qp-card" style="margin-bottom:16px;">
+        <div class="qp-actions">
+            <input class="nht-queue form-input"
+                   name="q"
+                   placeholder="Search job, UUID, exception..."
+                   value="{{ $filters['q'] ?? '' }}"/>
+
+            <select class="nht-queue form-input" name="queue">
+                <option value="">All Queues</option>
+                @foreach($queues as $q)
+                    <option value="{{ $q }}" @selected(($filters['queue'] ?? '') === $q)>
+                        {{ $q }}
+                    </option>
+                @endforeach
+            </select>
+
+            <select class="nht-queue form-input" name="connection">
+                <option value="">All Connections</option>
+                @foreach($connections as $c)
+                    <option value="{{ $c }}" @selected(($filters['connection'] ?? '') === $c)>
+                        {{ $c }}
+                    </option>
+                @endforeach
+            </select>
+
+            <input class="nht-queue form-input"
+                   type="date"
+                   name="from"
+                   value="{{ $filters['from'] ?? '' }}"/>
+
+            <input class="nht-queue form-input"
+                   type="date"
+                   name="to"
+                   value="{{ $filters['to'] ?? '' }}"/>
+
+            <button type="submit" class="qp-btn">Apply</button>
+
+            <a href="{{ route('queue-monitor.failed.index') }}" class="qp-btn qp-btn-secondary">
+                Reset
+            </a>
+        </div>
+    </form>
+
+    <form method="POST"
+          action="{{ route('queue-monitor.failed.bulk-destroy') }}"
+          onsubmit="return confirm('Delete selected failed jobs?');">
+        @csrf
+        @method('DELETE')
+
+        <div class="qp-card">
+            <div class="qp-card-head" style="margin-bottom:16px;">
+                <div>
+                    <h2 style="margin:0;">Failed Jobs Table</h2>
+                    <p class="qp-subtitle">Select jobs for bulk action</p>
+                </div>
+
+                <div class="qp-actions">
+                    <button type="submit" class="qp-btn qp-btn-danger">
+                        Delete Selected
+                    </button>
+                </div>
+            </div>
+
+            <div class="qp-table-wrap">
+                <table class="qp-table">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="checkAll">
+                        </th>
+                        <th>ID</th>
+                        <th>UUID</th>
+                        <th>Queue</th>
+                        <th>Connection</th>
+                        <th>Job</th>
+                        <th>Failed At</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    @forelse($jobs as $job)
+                        @php
+                            $payload = json_decode($job->payload ?? '{}', true);
+                            $jobName = $payload['displayName']
+                                ?? $payload['job']
+                                ?? data_get($payload, 'data.commandName')
+                                ?? 'Unknown Job';
+
+                            $uuid = $job->uuid ?? ($payload['uuid'] ?? 'N/A');
+                        @endphp
+
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="ids[]" value="{{ $job->id }}" class="job-checkbox">
+                            </td>
+
+                            <td>#{{ $job->id }}</td>
+
+                            <td class="qp-mono">
+                                {{ $uuid }}
+                            </td>
+
+                            <td>
+                                <span class="qp-badge">{{ $job->queue }}</span>
+                            </td>
+
+                            <td>{{ $job->connection }}</td>
+
+                            <td>{{ $jobName }}</td>
+
+                            <td>{{ $job->failed_at }}</td>
+
+                            <td>
+                                <div class="qp-actions">
+                                    <a href="{{ route('queue-monitor.failed.show', $job->id) }}"
+                                       class="qp-btn qp-btn-sm">
+                                        View
+                                    </a>
+
+                                    <form method="POST"
+                                          action="{{ route('queue-monitor.failed.retry', $job->id) }}">
+                                        @csrf
+                                        <button type="submit" class="qp-btn qp-btn-sm">
+                                            Retry
+                                        </button>
+                                    </form>
+
+                                    <form method="POST"
+                                          action="{{ route('queue-monitor.failed.destroy', $job->id) }}"
+                                          onsubmit="return confirm('Delete this failed job?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="qp-btn qp-btn-sm qp-btn-danger">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="qp-empty">No results</td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="qp-pagination">
+                {{ $jobs->links() }}
+            </div>
+        </div>
+    </form>
+
+    <script>
+        document.getElementById('checkAll')?.addEventListener('change', function () {
+            document.querySelectorAll('.job-checkbox').forEach(function (checkbox) {
+                checkbox.checked = event.target.checked;
+            });
+        });
+    </script>
 @endsection

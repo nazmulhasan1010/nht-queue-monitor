@@ -9,6 +9,10 @@ use NHT\QueueMonitor\Support\JobPayload;
 
 class RecordProcessedJob
 {
+    /**
+     * @param JobProcessed $event
+     * @return void
+     */
     public function handle(JobProcessed $event): void
     {
         if (! config('queue-monitor.tracking.track_successful_jobs', false)) {
@@ -37,6 +41,9 @@ class RecordProcessedJob
         }
     }
 
+    /**
+     * @return string|null
+     */
     protected function tenantId(): ?string
     {
         $resolver = config('queue-monitor.tenant.resolver');

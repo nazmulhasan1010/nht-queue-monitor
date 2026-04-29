@@ -16,13 +16,22 @@ use NHT\QueueMonitor\Listeners\RecordProcessedJob;
 
 class QueueMonitorServiceProvider extends ServiceProvider
 {
-    const QUEUE_PULSE_MIGRATIONS = 'queue-monitor-migrations';
+    /**
+     *
+     */
+    const QUEUE_MONITOR_MIGRATIONS = 'queue-monitor-migrations';
 
+    /**
+     * @return void
+     */
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/queue-monitor.php', 'queue-monitor');
     }
 
+    /**
+     * @return void
+     */
     public function boot(): void
     {
         if (! config('queue-monitor.enabled', true)) {
@@ -51,7 +60,7 @@ class QueueMonitorServiceProvider extends ServiceProvider
         });
 
         $this->publishes([__DIR__ . '/../config/queue-monitor.php' => config_path('queue-monitor.php')], 'queue-monitor-config');
-        $this->publishes([__DIR__ . '/../database/migrations' => database_path('migrations')], '' . self::QUEUE_PULSE_MIGRATIONS . '');
+        $this->publishes([__DIR__ . '/../database/migrations' => database_path('migrations')], '' . self::QUEUE_MONITOR_MIGRATIONS . '');
         $this->publishes([__DIR__ . '/../public/vendor/queue-monitor' => public_path('vendor/queue-monitor')], 'queue-monitor-assets');
     }
 }

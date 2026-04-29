@@ -2,13 +2,17 @@
 
 namespace NHT\QueueMonitor\Http\Controllers\Api;
 
+use http\Client\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 
 class StatsController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function trend(Request $request)
     {
         $days = (int) $request->get('days', 7);

@@ -6,6 +6,11 @@ use NHT\QueueMonitor\Models\QueueMonitorEvent;
 
 class EventLogger
 {
+    /**
+     * @param string $eventType
+     * @param array $data
+     * @return void
+     */
     public function log(string $eventType, array $data = []): void
     {
         if (! config('queue-monitor.audit.enabled', true)) {

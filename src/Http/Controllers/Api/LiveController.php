@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 class LiveController extends Controller
 {
+    /**
+     * @return mixed
+     */
     public function index()
     {
         return response()->json([
@@ -15,7 +18,7 @@ class LiveController extends Controller
                 ->limit(10)
                 ->get(),
 
-            'events' => DB::table('queue_pulse_events')
+            'events' => DB::table('queue_monitor_events')
                 ->latest('created_at')
                 ->limit(10)
                 ->get(),

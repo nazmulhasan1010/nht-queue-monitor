@@ -8,20 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('queue_pulse_jobs', function (Blueprint $table) {
-            if (! Schema::hasColumn('queue_pulse_jobs', 'node_name')) {
+        Schema::table('queue_monitor_jobs', function (Blueprint $table) {
+            if (! Schema::hasColumn('queue_monitor_jobs', 'node_name')) {
                 $table->string('node_name')->nullable()->after('queue')->index();
             }
 
-            if (! Schema::hasColumn('queue_pulse_jobs', 'tenant_id')) {
+            if (! Schema::hasColumn('queue_monitor_jobs', 'tenant_id')) {
                 $table->string('tenant_id')->nullable()->after('node_name')->index();
             }
 
-            if (! Schema::hasColumn('queue_pulse_jobs', 'tags')) {
+            if (! Schema::hasColumn('queue_monitor_jobs', 'tags')) {
                 $table->json('tags')->nullable()->after('payload');
             }
 
-            if (! Schema::hasColumn('queue_pulse_jobs', 'insight')) {
+            if (! Schema::hasColumn('queue_monitor_jobs', 'insight')) {
                 $table->text('insight')->nullable()->after('exception');
             }
         });
@@ -29,9 +29,9 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('queue_pulse_jobs', function (Blueprint $table) {
+        Schema::table('queue_monitor_jobs', function (Blueprint $table) {
             foreach (['node_name', 'tenant_id', 'tags', 'insight'] as $column) {
-                if (Schema::hasColumn('queue_pulse_jobs', $column)) {
+                if (Schema::hasColumn('queue_monitor_jobs', $column)) {
                     $table->dropColumn($column);
                 }
             }

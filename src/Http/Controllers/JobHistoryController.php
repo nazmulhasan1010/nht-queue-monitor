@@ -4,10 +4,15 @@ namespace NHT\QueueMonitor\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\View\View;
 use NHT\QueueMonitor\Models\QueueMonitorJob;
 
 class JobHistoryController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return View
+     */
     public function index(Request $request)
     {
         $query = QueueMonitorJob::query()->latest('finished_at');
@@ -37,6 +42,10 @@ class JobHistoryController extends Controller
         ]);
     }
 
+    /**
+     * @param int|string $id
+     * @return View
+     */
     public function show(int|string $id)
     {
         return view('queue-monitor::jobs.show', [

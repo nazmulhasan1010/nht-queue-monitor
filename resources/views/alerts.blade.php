@@ -1,23 +1,21 @@
-
 @extends('queue-monitor::layout')
-
 @section('content')
-<div class="qp-header">
-    <div>
-        <h1 class="qp-title">Queue Alerts</h1>
-        <p class="qp-subtitle">Threshold-based queue failure alerts.</p>
+    <div class="qp-header">
+        <div>
+            <h1 class="qp-title">Queue Alerts</h1>
+            <p class="qp-subtitle">Threshold-based queue failure alerts.</p>
+        </div>
+
+        <form method="POST" action="{{ route('queue-monitor.alerts.check') }}">
+            @csrf
+            <button class="qp-btn">Run Alert Check</button>
+        </form>
     </div>
 
-    <form method="POST" action="{{ route('queue-monitor.alerts.check') }}">
-        @csrf
-        <button class="qp-btn">Run Alert Check</button>
-    </form>
-</div>
-
-<div class="qp-card">
-    <div class="qp-table-wrap">
-        <table class="qp-table">
-            <thead>
+    <div class="qp-card">
+        <div class="qp-table-wrap">
+            <table class="qp-table">
+                <thead>
                 <tr>
                     <th>ID</th>
                     <th>Level</th>
@@ -27,9 +25,9 @@
                     <th>Created</th>
                     <th></th>
                 </tr>
-            </thead>
+                </thead>
 
-            <tbody>
+                <tbody>
                 @forelse($alerts as $alert)
                     <tr>
                         <td>#{{ $alert->id }}</td>
@@ -52,10 +50,10 @@
                         <td colspan="7" class="qp-empty">No alerts found.</td>
                     </tr>
                 @endforelse
-            </tbody>
-        </table>
-    </div>
+                </tbody>
+            </table>
+        </div>
 
-    <div class="qp-pagination">{{ $alerts->links() }}</div>
-</div>
+        <div class="qp-pagination">{{ $alerts->links() }}</div>
+    </div>
 @endsection

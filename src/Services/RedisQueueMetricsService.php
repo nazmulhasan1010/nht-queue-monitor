@@ -7,6 +7,10 @@ use Throwable;
 
 class RedisQueueMetricsService
 {
+    /**
+     * @param array $queues
+     * @return array
+     */
     public function metrics(array $queues = ['default']): array
     {
         $rows = [];

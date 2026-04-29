@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Mail;
 
 class QueueMonitorNotifier
 {
+    /**
+     * @param string $title
+     * @param string $message
+     * @param array $meta
+     * @return void
+     */
     public function notify(string $title, string $message, array $meta = []): void
     {
         if (! config('queue-monitor.notifications.enabled', false)) {
@@ -22,6 +28,12 @@ class QueueMonitorNotifier
         }
     }
 
+    /**
+     * @param string $title
+     * @param string $message
+     * @param array $meta
+     * @return void
+     */
     protected function sendSlack(string $title, string $message, array $meta = []): void
     {
         Http::post(config('queue-monitor.notifications.slack_webhook_url'), [
@@ -29,6 +41,12 @@ class QueueMonitorNotifier
         ]);
     }
 
+    /**
+     * @param string $title
+     * @param string $message
+     * @param array $meta
+     * @return void
+     */
     protected function sendMail(string $title, string $message, array $meta = []): void
     {
         Mail::raw($message . "\n\n" . json_encode($meta, JSON_PRETTY_PRINT), function ($mail) use ($title) {

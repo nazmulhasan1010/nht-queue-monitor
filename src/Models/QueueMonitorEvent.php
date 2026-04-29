@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class QueueMonitorEvent extends Model
 {
-    protected $table = 'queue_pulse_events';
+    protected $table = 'queue_monitor_events';
 
     protected $fillable = [
         'event_type',

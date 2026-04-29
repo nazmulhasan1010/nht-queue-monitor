@@ -61,8 +61,8 @@ Visit:
 Use one or both:
 
 ```env
-QUEUE_PULSE_ALLOWED_EMAILS=admin@example.com,dev@example.com
-QUEUE_PULSE_ENABLE_GATE=true
+QUEUE_MONITOR_ALLOWED_EMAILS=admin@example.com,dev@example.com
+QUEUE_MONITOR_ENABLE_GATE=true
 ```
 
 In `AuthServiceProvider`:

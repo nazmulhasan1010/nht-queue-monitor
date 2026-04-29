@@ -10,6 +10,10 @@ use NHT\QueueMonitor\Support\JobPayload;
 
 class RecordFailedJob
 {
+    /**
+     * @param JobFailed $event
+     * @return void
+     */
     public function handle(JobFailed $event): void
     {
         if (! config('queue-monitor.tracking.track_failed_jobs_events', true)) {
@@ -41,6 +45,9 @@ class RecordFailedJob
         }
     }
 
+    /**
+     * @return string|null
+     */
     protected function tenantId(): ?string
     {
         $resolver = config('queue-monitor.tenant.resolver');

@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Gate;
 
 class QueueMonitorAccess
 {
+    /**
+     * @param Request $request
+     * @param Closure $next
+     * @return mixed|void
+     */
     public function handle(Request $request, Closure $next)
     {
         $user = $request->user();

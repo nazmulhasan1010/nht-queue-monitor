@@ -4,6 +4,10 @@ namespace NHT\QueueMonitor\Support;
 
 class JobPayload
 {
+    /**
+     * @param string|null $rawPayload
+     * @return array
+     */
     public static function fromRaw(?string $rawPayload): array
     {
         $payload = json_decode($rawPayload ?: '{}', true);
@@ -11,6 +15,10 @@ class JobPayload
         return is_array($payload) ? $payload : [];
     }
 
+    /**
+     * @param array $payload
+     * @return string
+     */
     public static function displayName(array $payload): string
     {
         return $payload['displayName']
@@ -19,6 +27,10 @@ class JobPayload
             ?? 'Unknown Job';
     }
 
+    /**
+     * @param array $payload
+     * @return string|null
+     */
     public static function uuid(array $payload): ?string
     {
         return $payload['uuid'] ?? null;

@@ -7,6 +7,9 @@ use NHT\QueueMonitor\Models\QueueMonitorAlert;
 
 class AlertService
 {
+    /**
+     * @return array
+     */
     public function check(): array
     {
         if (! config('queue-monitor.alerts.enabled', true)) {
@@ -41,6 +44,14 @@ class AlertService
         return $created;
     }
 
+    /**
+     * @param string $key
+     * @param string $level
+     * @param string $title
+     * @param string $message
+     * @param array $meta
+     * @return QueueMonitorAlert
+     */
     protected function createOrUpdate(string $key, string $level, string $title, string $message, array $meta): QueueMonitorAlert
     {
         return QueueMonitorAlert::query()->updateOrCreate(

@@ -7,9 +7,19 @@ use NHT\QueueMonitor\Services\AlertService;
 
 class QueueMonitorCheckAlertsCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected $signature = 'queue-monitor:check-alerts';
+    /**
+     * @var string
+     */
     protected $description = 'Check Queue Pulse alert thresholds';
 
+    /**
+     * @param AlertService $alertService
+     * @return int
+     */
     public function handle(AlertService $alertService): int
     {
         $alerts = $alertService->check();

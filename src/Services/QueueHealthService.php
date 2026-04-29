@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\DB;
 
 class QueueHealthService
 {
+    /**
+     * @return array
+     */
     public function summary(): array
     {
         $total = DB::table('failed_jobs')->count();
@@ -42,6 +45,9 @@ class QueueHealthService
         ];
     }
 
+    /**
+     * @return mixed
+     */
     public function queueDistribution()
     {
         return DB::table('failed_jobs')
@@ -52,6 +58,9 @@ class QueueHealthService
             ->get();
     }
 
+    /**
+     * @return mixed
+     */
     public function connectionDistribution()
     {
         return DB::table('failed_jobs')
@@ -62,6 +71,9 @@ class QueueHealthService
             ->get();
     }
 
+    /**
+     * @return mixed
+     */
     public function hourlyHeatmap()
     {
         return DB::table('failed_jobs')
@@ -72,6 +84,10 @@ class QueueHealthService
             ->get();
     }
 
+    /**
+     * @param int $score
+     * @return string
+     */
     protected function statusFromScore(int $score): string
     {
         if ($score >= 85) {

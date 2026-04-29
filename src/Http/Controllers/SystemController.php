@@ -4,10 +4,15 @@ namespace NHT\QueueMonitor\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use NHT\QueueMonitor\Services\RedisQueueMetricsService;
 
 class SystemController extends Controller
 {
+    /**
+     * @param RedisQueueMetricsService $redisMetrics
+     * @return View
+     */
     public function index(RedisQueueMetricsService $redisMetrics)
     {
         $queues = DB::table('failed_jobs')->distinct()->pluck('queue')->filter()->values()->all();

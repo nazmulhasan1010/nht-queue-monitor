@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('queue_pulse_events', function (Blueprint $table) {
+        Schema::create('queue_monitor_events', function (Blueprint $table) {
             $table->id();
             $table->string('event_type');
             $table->string('job_id')->nullable();
@@ -26,6 +26,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('queue_pulse_events');
+        Schema::dropIfExists('queue_monitor_events');
     }
 };

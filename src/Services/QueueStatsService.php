@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 class QueueStatsService
 {
+    /**
+     * @return array
+     */
     public function summary(): array
     {
         $today = Carbon::today();
@@ -19,11 +22,12 @@ class QueueStatsService
         ];
     }
 
-    public function latestFailedJobs(int $limit = 5)
+    /**
+     * @param int $limit
+     * @return mixed
+     */
+    public function latestFailedJobs(int $limit = 5): mixed
     {
-        return DB::table('failed_jobs')
-            ->orderByDesc('failed_at')
-            ->limit($limit)
-            ->get();
+        return DB::table('failed_jobs')->orderByDesc('failed_at')->limit($limit)->get();
     }
 }

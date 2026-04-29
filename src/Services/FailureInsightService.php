@@ -4,6 +4,10 @@ namespace NHT\QueueMonitor\Services;
 
 class FailureInsightService
 {
+    /**
+     * @param string|null $exception
+     * @return string
+     */
     public function insight(?string $exception): string
     {
         $text = strtolower((string) $exception);

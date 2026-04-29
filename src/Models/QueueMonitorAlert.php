@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class QueueMonitorAlert extends Model
 {
-    protected $table = 'queue_pulse_alerts';
+    protected $table = 'queue_monitor_alerts';
 
     protected $fillable = [
         'alert_key',

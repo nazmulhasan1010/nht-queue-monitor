@@ -7,9 +7,19 @@ use NHT\QueueMonitor\Services\QueueHealthService;
 
 class QueueMonitorHealthCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected $signature = 'queue-monitor:health';
+    /**
+     * @var string
+     */
     protected $description = 'Show Queue Pulse health summary';
 
+    /**
+     * @param QueueHealthService $service
+     * @return int
+     */
     public function handle(QueueHealthService $service): int
     {
         $summary = $service->summary();

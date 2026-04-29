@@ -18,7 +18,8 @@
             @endif
 
             @if(config('queue-monitor.allow_delete', true))
-                <form action="{{ route('queue-monitor.failed.destroy', $job->id) }}" method="POST" onsubmit="return confirm('Delete this failed job?');">
+                <form action="{{ route('queue-monitor.failed.destroy', $job->id) }}" method="POST"
+                      onsubmit="return confirm('Delete this failed job?');">
                     @csrf
                     @method('DELETE')
                     <button class="qp-btn qp-btn-danger" type="submit">Delete</button>
@@ -63,7 +64,8 @@
                 <h2>Payload JSON</h2>
                 <button class="qp-btn qp-btn-sm" data-qp-copy="#qp-payload-json">Copy Payload</button>
             </div>
-            <pre class="qp-code" id="qp-payload-json">{{ json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
+            <pre class="qp-code"
+                 id="qp-payload-json">{{ json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
         </div>
 
         <div class="qp-tab-panel" data-qp-tab-panel="exception">
@@ -87,7 +89,7 @@
                 'job_name' => $jobName,
                 'attempts' => $attempts,
                 'failed_at' => $job->failed_at,
-            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
+            ], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
         </div>
     </div>
 @endsection

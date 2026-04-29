@@ -3,9 +3,13 @@
 namespace NHT\QueueMonitor\Http\Controllers;
 
 use Illuminate\Routing\Controller;
+use Illuminate\View\View;
 
 class SettingsController extends Controller
 {
+    /**
+     * @return View
+     */
     public function index()
     {
         return view('queue-monitor::settings', [

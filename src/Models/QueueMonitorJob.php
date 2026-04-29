@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class QueueMonitorJob extends Model
 {
-    protected $table = 'queue_pulse_jobs';
+    protected $table = 'queue_monitor_jobs';
 
     protected $fillable = [
         'uuid',

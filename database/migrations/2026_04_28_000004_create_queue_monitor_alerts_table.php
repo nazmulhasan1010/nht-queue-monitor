@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('queue_pulse_alerts', function (Blueprint $table) {
+        Schema::create('queue_monitor_alerts', function (Blueprint $table) {
             $table->id();
             $table->string('alert_key')->index();
             $table->string('level')->default('warning')->index();
@@ -22,6 +22,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('queue_pulse_alerts');
+        Schema::dropIfExists('queue_monitor_alerts');
     }
 };
