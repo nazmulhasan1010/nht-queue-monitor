@@ -23,7 +23,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "NHT\\QueueMonitorServiceProvider"
+        "NHT\\QueueMonitor\\QueueMonitorServiceProvider"
       ]
     }
   },

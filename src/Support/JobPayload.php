@@ -1,4 +1,3 @@
-
 <?php
 
 namespace NHT\QueueMonitor\Support;
