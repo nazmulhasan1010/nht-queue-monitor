@@ -1,0 +1,27 @@
+.qp-card {
+  background: linear-gradient(180deg, rgba($qp-card-2,.95), rgba($qp-card,.95));
+  border: 1px solid $qp-border;
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: 0 24px 60px rgba(0,0,0,.35);
+}
+
+.qp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+  background: linear-gradient(135deg, $qp-pink, $qp-pink-2);
+}
+
+.qp-btn-danger {
+  background: rgba($qp-danger,.12);
+  color: lighten($qp-danger, 18%);
+  border: 1px solid rgba($qp-danger,.3);
+}

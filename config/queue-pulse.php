@@ -1,0 +1,74 @@
+
+<?php
+
+return [
+    'enabled' => env('QUEUE_PULSE_ENABLED', true),
+    'route_prefix' => env('QUEUE_PULSE_ROUTE_PREFIX', 'queue-monitor'),
+
+    'middleware' => [
+        'web',
+        'auth',
+        \NHT\QueueMonitor\Http\Middleware\QueueMonitorAccess::class,
+    ],
+
+    'pagination' => 20,
+
+    'allow_retry' => true,
+    'allow_delete' => true,
+    'allow_clear' => true,
+    'allow_bulk_delete' => true,
+    'allow_export' => true,
+
+    'node' => [
+        'name' => env('QUEUE_PULSE_NODE_NAME', gethostname() ?: 'default-node'),
+        'environment' => env('APP_ENV', 'production'),
+    ],
+
+    'tenant' => [
+        'enabled' => env('QUEUE_PULSE_TENANT_MODE', false),
+        'resolver' => null,
+    ],
+
+    'broadcasting' => [
+        'enabled' => env('QUEUE_PULSE_BROADCAST_ENABLED', false),
+        'channel' => env('QUEUE_PULSE_BROADCAST_CHANNEL', 'queue-monitor'),
+    ],
+
+    'alerts' => [
+        'enabled' => env('QUEUE_PULSE_ALERTS_ENABLED', true),
+        'failed_jobs_24h' => env('QUEUE_PULSE_ALERT_FAILED_24H', 20),
+        'failed_jobs_1h' => env('QUEUE_PULSE_ALERT_FAILED_1H', 5),
+    ],
+
+    'tracking' => [
+        'track_successful_jobs' => env('QUEUE_PULSE_TRACK_SUCCESSFUL_JOBS', false),
+        'track_failed_jobs_events' => env('QUEUE_PULSE_TRACK_FAILED_JOB_EVENTS', true),
+        'store_payload' => env('QUEUE_PULSE_STORE_JOB_PAYLOAD', false),
+        'store_exception' => env('QUEUE_PULSE_STORE_JOB_EXCEPTION', true),
+        'retention_days' => env('QUEUE_PULSE_JOB_RETENTION_DAYS', 30),
+    ],
+
+    'access' => [
+        'enable_gate' => env('QUEUE_PULSE_ENABLE_GATE', false),
+        'gate' => 'viewQueueMonitor',
+        'allowed_emails' => array_filter(array_map('trim', explode(',', env('QUEUE_PULSE_ALLOWED_EMAILS', '')))),
+    ],
+
+    'audit' => ['enabled' => true],
+
+    'notifications' => [
+        'enabled' => env('QUEUE_PULSE_NOTIFICATIONS_ENABLED', false),
+        'channels' => [
+            'mail' => env('QUEUE_PULSE_NOTIFY_MAIL', false),
+            'slack' => env('QUEUE_PULSE_NOTIFY_SLACK', false),
+        ],
+        'mail_to' => env('QUEUE_PULSE_NOTIFY_MAIL_TO'),
+        'slack_webhook_url' => env('QUEUE_PULSE_SLACK_WEBHOOK_URL'),
+    ],
+
+    'assets' => [
+        'use_built_assets' => true,
+        'css' => 'vendor/queue-monitor/css/style.css',
+        'js' => 'vendor/queue-monitor/js/app.js',
+    ],
+];

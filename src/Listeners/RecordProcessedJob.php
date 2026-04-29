@@ -1,0 +1,47 @@
+
+<?php
+
+namespace NHT\QueueMonitor\Listeners;
+
+use Illuminate\Queue\Events\JobProcessed;
+use NHT\QueueMonitor\Events\QueueMonitorJobRecorded;
+use NHT\QueueMonitor\Models\QueueMonitorJob;
+use NHT\QueueMonitor\Support\JobPayload;
+
+class RecordProcessedJob
+{
+    public function handle(JobProcessed $event): void
+    {
+        if (! config('queue-monitor.tracking.track_successful_jobs', false)) {
+            return;
+        }
+
+        $payload = JobPayload::fromRaw($event->job->getRawBody());
+
+        $job = QueueMonitorJob::query()->create([
+            'uuid' => JobPayload::uuid($payload),
+            'connection' => $event->connectionName,
+            'queue' => $event->job->getQueue(),
+            'node_name' => config('queue-monitor.node.name'),
+            'tenant_id' => $this->tenantId(),
+            'job_name' => JobPayload::displayName($payload),
+            'status' => 'processed',
+            'attempts' => method_exists($event->job, 'attempts') ? $event->job->attempts() : null,
+            'duration_ms' => null,
+            'payload' => config('queue-monitor.tracking.store_payload', false) ? $payload : null,
+            'tags' => $payload['tags'] ?? null,
+            'finished_at' => now(),
+        ]);
+
+        if (config('queue-monitor.broadcasting.enabled', false)) {
+            event(new QueueMonitorJobRecorded($job->toArray()));
+        }
+    }
+
+    protected function tenantId(): ?string
+    {
+        $resolver = config('queue-monitor.tenant.resolver');
+
+        return is_callable($resolver) ? (string) $resolver() : null;
+    }
+}
