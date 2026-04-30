@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <div class="qp-detail-grid">
+    <div class="grid-1 qp-detail-grid">
         <div class="qp-card">
             <h2>Queue Distribution</h2>
             <div class="qp-table-wrap">
