@@ -24,15 +24,17 @@ class Uninstall extends Command
      */
     public function handle(): int
     {
-        $this->info('Uninstalling nh|Notification...');
+        $this->info('Uninstalling nh|queue-monitor...');
 
         $fs = new Filesystem();
 
         $paths = [
-            config_path('notification.php'),
-            app_path('Broadcasting/SmsChannel.php'),
-            app_path('Broadcasting/SmsNiagaChannel.php'),
-            app_path('Http/Controllers/NotificationController.php'),
+            config_path('queue-monitor.php'),
+            database_path('migrations/2026_04_28_000001_create_queue_monitor_events_table.php'),
+            database_path('migrations/2026_04_28_000002_create_queue_monitor_jobs_table.php'),
+            database_path('migrations/2026_04_28_000003_add_enterprise_fields_to_queue_monitor_jobs.php'),
+            database_path('migrations/2026_04_28_000004_create_queue_monitor_alerts_table.php'),
+            public_path('vendor/queue-monitor')
         ];
 
         foreach ($paths as $path) {
@@ -50,7 +52,7 @@ class Uninstall extends Command
         $this->callSilent('cache:clear');
 
         $this->newLine();
-        $this->info('✅ nht|notification successfully uninstalled!');
+        $this->info('✅ nht|queue-monitor successfully uninstalled!');
         $this->line('All related config, templates, and channels have been removed.');
 
         return self::SUCCESS;

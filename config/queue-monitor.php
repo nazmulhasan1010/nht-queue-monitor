@@ -4,11 +4,11 @@ return [
     'enabled' => env('QUEUE_MONITOR_ENABLED', true),
     'route_prefix' => env('QUEUE_MONITOR_ROUTE_PREFIX', 'queue-monitor'),
 
-//    'middleware' => [
-//        'web',
-//        'auth',
-//        \NHT\QueueMonitor\Http\Middleware\QueueMonitorAccess::class,
-//    ],
+    'middleware' => [
+        'web',
+        'auth',
+        \NHT\QueueMonitor\Http\Middleware\QueueMonitorAccess::class,
+    ],
 
     'pagination' => 20,
 

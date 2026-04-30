@@ -4,6 +4,7 @@ namespace NHT\QueueMonitor\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use JsonException;
 
 class FailedJobService
 {
@@ -16,8 +17,8 @@ class FailedJobService
         $q = DB::table('failed_jobs')->orderByDesc('failed_at');
 
         if (!empty($filters['q'])) {
-            $term = '%'.$filters['q'].'%';
-            $q->where(function($w) use ($term) {
+            $term = '%' . $filters['q'] . '%';
+            $q->where(function ($w) use ($term) {
                 $w->where('payload', 'like', $term)->orWhere('exception', 'like', $term)->orWhere('uuid', 'like', $term);
             });
         }
@@ -37,13 +38,13 @@ class FailedJobService
             $q->whereDate('failed_at', '<=', $filters['to']);
         }
 
-        return $q->paginate((int) config('queue-monitor.pagination', 20))->withQueryString();
+        return $q->paginate((int)config('queue-monitor.pagination', 20))->withQueryString();
     }
 
     /**
      * @return mixed
      */
-    public function distinctQueues()
+    public function distinctQueues(): mixed
     {
         return DB::table('failed_jobs')->distinct()->pluck('queue')->filter()->values();
     }
@@ -52,7 +53,7 @@ class FailedJobService
      * @param $id
      * @return mixed
      */
-    public function findOrFail($id)
+    public function findOrFail($id): mixed
     {
         $job = DB::table('failed_jobs')->where('id', $id)->first();
 
@@ -66,37 +67,45 @@ class FailedJobService
     /**
      * @return mixed
      */
-    public function distinctConnections()
+    public function distinctConnections(): mixed
     {
         return DB::table('failed_jobs')->distinct()->pluck('connection')->filter()->values();
     }
 
+    /**
+     * @param $job
+     * @return array
+     * @throws JsonException
+     */
     public function decodePayload($job): array
     {
         if (!isset($job->payload)) {
             return [];
         }
 
-        $payload = json_decode($job->payload, true);
+        $payload = json_decode($job->payload, true, 512, JSON_THROW_ON_ERROR);
 
         return is_array($payload) ? $payload : [];
     }
 
+
     /**
-     * Extract job name from payload
+     * @param $job
+     * @return string
+     * @throws JsonException
      */
     public function jobName($job): string
     {
         $payload = $this->decodePayload($job);
 
-        return $payload['displayName']
-            ?? $payload['job']
-            ?? data_get($payload, 'data.commandName')
-            ?? 'Unknown Job';
+        return $payload['displayName'] ?? $payload['job'] ?? data_get($payload, 'data.commandName') ?? 'Unknown Job';
     }
 
+
     /**
-     * Extract UUID safely
+     * @param $job
+     * @return string|null
+     * @throws JsonException
      */
     public function uuid($job): ?string
     {
@@ -106,8 +115,11 @@ class FailedJobService
             ?? ($payload['uuid'] ?? null);
     }
 
+
     /**
-     * Extract attempts count
+     * @param $job
+     * @return int|null
+     * @throws JsonException
      */
     public function attempts($job): ?int
     {
@@ -116,8 +128,11 @@ class FailedJobService
         return $payload['attempts'] ?? null;
     }
 
+
     /**
-     * Short exception preview (for UI)
+     * @param $job
+     * @param int $limit
+     * @return string
      */
     public function exceptionPreview($job, int $limit = 300): string
     {
@@ -127,8 +142,6 @@ class FailedJobService
 
         $text = trim($job->exception);
 
-        return mb_strlen($text) > $limit
-            ? mb_substr($text, 0, $limit) . '...'
-            : $text;
+        return mb_strlen($text) > $limit ? mb_substr($text, 0, $limit) . '...' : $text;
     }
 }

@@ -13,7 +13,7 @@ use NHT\QueueMonitor\Http\Controllers\SystemController;
 
 Route::group([
     'prefix' => config('queue-monitor.route_prefix', 'queue-monitor'),
-//    'middleware' => config('queue-monitor.middleware', ['web', 'auth']),
+    'middleware' => config('queue-monitor.middleware', ['web', 'auth']),
 ], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('queue-monitor.dashboard');
 
