@@ -4,8 +4,6 @@ namespace NHT\QueueMonitor\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use function NH\Notification\Console\app_path;
-use function NH\Notification\Console\config_path;
 
 class Uninstall extends Command
 {
