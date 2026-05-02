@@ -11,22 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('queue_monitor_jobs', function (Blueprint $table) {
-            $table->id();
-            $table->string('uuid')->nullable()->index();
-            $table->string('connection')->nullable()->index();
-            $table->string('queue')->nullable()->index();
-            $table->string('job_name')->nullable()->index();
-            $table->string('status')->default('processed')->index();
-            $table->unsignedInteger('attempts')->nullable();
-            $table->unsignedInteger('duration_ms')->nullable();
-            $table->longText('exception')->nullable();
-            $table->json('payload')->nullable();
-            $table->timestamp('finished_at')->nullable()->index();
-            $table->timestamps();
+        if (! Schema::hasTable('queue_monitor_jobs')) {
+            Schema::create('queue_monitor_jobs', function (Blueprint $table) {
+                $table->id();
+                $table->string('uuid')->nullable()->index();
+                $table->string('connection')->nullable()->index();
+                $table->string('queue')->nullable()->index();
+                $table->string('job_name')->nullable()->index();
+                $table->string('status')->default('processed')->index();
+                $table->unsignedInteger('attempts')->nullable();
+                $table->unsignedInteger('duration_ms')->nullable();
+                $table->longText('exception')->nullable();
+                $table->json('payload')->nullable();
+                $table->timestamp('finished_at')->nullable()->index();
+                $table->timestamps();
 
-            $table->index(['status', 'finished_at']);
-        });
+                $table->index(['status', 'finished_at']);
+            });
+        }
     }
 
     /**

@@ -11,20 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('queue_monitor_events', function (Blueprint $table) {
-            $table->id();
-            $table->string('event_type');
-            $table->string('job_id')->nullable();
-            $table->string('queue')->nullable();
-            $table->string('connection')->nullable();
-            $table->string('job_name')->nullable();
-            $table->string('performed_by')->nullable();
-            $table->json('meta')->nullable();
-            $table->timestamps();
+        if (! Schema::hasTable('queue_monitor_events')) {
+            Schema::create('queue_monitor_events', function (Blueprint $table) {
+                $table->id();
+                $table->string('event_type');
+                $table->string('job_id')->nullable();
+                $table->string('queue')->nullable();
+                $table->string('connection')->nullable();
+                $table->string('job_name')->nullable();
+                $table->string('performed_by')->nullable();
+                $table->json('meta')->nullable();
+                $table->timestamps();
 
-            $table->index(['event_type', 'created_at']);
-            $table->index(['job_id']);
-        });
+                $table->index(['event_type', 'created_at']);
+                $table->index(['job_id']);
+            });
+        }
     }
 
     /**

@@ -108,6 +108,34 @@ Once installed, visit `/queue-monitor` in your browser.
 - **Audit Logs**: See who retried or deleted which job and when.
 - **System**: Detailed diagnostics of your worker nodes.
 
+## 🔌 API Reference
+
+Queue Pulse provides a lightweight JSON API for external integrations or custom dashboards.
+
+### Live Feed
+Returns the latest failed jobs and monitor events.
+- **Endpoint**: `GET /queue-monitor/api/live`
+- **Response**:
+```json
+{
+  "failed_jobs": [...],
+  "events": [...]
+}
+```
+
+### Failure Trends
+Returns data for generating charts.
+- **Endpoint**: `GET /queue-monitor/api/trend?days=7`
+- **Parameters**: 
+    - `days` (optional): Number of days to include (default: 7).
+- **Response**:
+```json
+{
+  "labels": ["2026-04-25", "2026-04-26", ...],
+  "values": [5, 12, ...]
+}
+```
+
 ## 🤝 Contributing
 Contributions are welcome! Please feel free to submit Pull Requests.
 

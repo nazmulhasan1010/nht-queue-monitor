@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('queue_monitor_alerts', function (Blueprint $table) {
-            $table->id();
-            $table->string('alert_key')->index();
-            $table->string('level')->default('warning')->index();
-            $table->string('title');
-            $table->text('message')->nullable();
-            $table->json('meta')->nullable();
-            $table->timestamp('resolved_at')->nullable()->index();
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('queue_monitor_alerts')) {
+            Schema::create('queue_monitor_alerts', function (Blueprint $table) {
+                $table->id();
+                $table->string('alert_key')->index();
+                $table->string('level')->default('warning')->index();
+                $table->string('title');
+                $table->text('message')->nullable();
+                $table->json('meta')->nullable();
+                $table->timestamp('resolved_at')->nullable()->index();
+                $table->timestamps();
+            });
+        }
     }
 
     /**
