@@ -2,21 +2,74 @@
     box-sizing: border-box;
 }
 
-$primary: #ff3ea5;
-$secondary: #ff7ac8;
-$dark-bg: #080812;
-$card-bg: #17172d;
-$text-light: #f8f7ff;
-$text-muted: #a5a3b8;
-$border-pink: rgba(255, 77, 166, 0.18);
+$primary: #38bdf8;
+$secondary: #6366f1;
+$accent: #22d3ee;
+
+$dark-bg: #020617;
+$dark-bg-soft: #0f172a;
+$sidebar-bg: #1e293b;
+$card-bg: #1e293b;
+$card-bg-dark: #0f172a;
+
+$text-white: #ffffff;
+$text-light: #f8fafc;
+$text-soft: #e0f2fe;
+$text-body: #cbd5e1;
+$text-muted: #94a3b8;
+
+$border-soft: rgba(148, 163, 184, 0.22);
+$border-light: #334155;
+$border-white-soft: rgba(255, 255, 255, 0.08);
+$border-white-muted: rgba(255, 255, 255, 0.07);
+$border-white-faint: rgba(255, 255, 255, 0.05);
+
+$shadow-dark: rgba(0, 0, 0, 0.42);
+$shadow-light: rgba(15, 23, 42, 0.08);
+$shadow-primary-soft: rgba(56, 189, 248, 0.18);
+$shadow-primary-medium: rgba(56, 189, 248, 0.26);
+$shadow-primary-strong: rgba(99, 102, 241, 0.34);
+
+$bg-radial-primary: rgba(56, 189, 248, 0.18);
+$bg-radial-secondary: rgba(99, 102, 241, 0.16);
+$bg-primary-soft: rgba(56, 189, 248, 0.12);
+$bg-primary-faint: rgba(56, 189, 248, 0.08);
+$bg-primary-badge: rgba(56, 189, 248, 0.14);
+
+$success: #86efac;
+$success-bg: rgba(34, 197, 94, 0.12);
+$success-border: rgba(34, 197, 94, 0.28);
+
+$danger: #fda4af;
+$danger-bg: rgba(244, 63, 94, 0.12);
+$danger-border: rgba(244, 63, 94, 0.32);
+
+$warning: #fde68a;
+$warning-bg: rgba(245, 158, 11, 0.12);
+$warning-border: rgba(245, 158, 11, 0.3);
+
+$pagination-bg: #0f172a;
+$pagination-text: #e2e8f0;
+$pagination-disabled-bg: #1e293b;
+$pagination-disabled-text: #64748b;
+
+$gradient-brand: linear-gradient(135deg, $primary 0%, $accent 45%, $secondary 100%);
+
+$gradient-body:
+        radial-gradient(circle at top left, $bg-radial-primary, transparent 34%),
+        radial-gradient(circle at bottom right, $bg-radial-secondary, transparent 38%),
+        $dark-bg;
+
+$gradient-card: linear-gradient(
+        180deg,
+        rgba(30, 41, 59, 0.96),
+        rgba(15, 23, 42, 0.96)
+);
 
 body {
     margin: 0;
     min-height: 100vh;
-    background:
-        radial-gradient(circle at top left, rgba(255, 62, 165, 0.20), transparent 35%),
-        radial-gradient(circle at bottom right, rgba(255, 122, 200, 0.12), transparent 40%),
-        $dark-bg;
+    background: $gradient-body;
     color: $text-light;
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -44,10 +97,18 @@ input[type="checkbox"] {
 }
 
 .qp-sidebar {
-    border-right: 1px solid $border-pink;
-    background: rgba(17, 17, 34, 0.82);
+    border-right: 1px solid $border-soft;
+    background: $sidebar-bg;
     backdrop-filter: blur(16px);
     padding: 24px;
+    overflow-y: auto;
+    max-height: 100vh;
+}
+
+.qp-main {
+    padding: 30px;
+    overflow-y: auto;
+    max-height: 100vh;
 }
 
 .qp-brand {
@@ -60,11 +121,11 @@ input[type="checkbox"] {
         width: 42px;
         height: 42px;
         border-radius: 14px;
-        background: linear-gradient(135deg, $primary, $secondary);
+        background: $gradient-brand;
         display: grid;
         place-items: center;
         font-weight: 900;
-        box-shadow: 0 14px 30px rgba(255, 62, 165, 0.28);
+        box-shadow: 0 14px 30px $shadow-primary-medium;
     }
 
     &-title {
@@ -80,7 +141,7 @@ input[type="checkbox"] {
         display: block;
         filter: invert(1);
         margin: 0 auto;
-        background: rgba(255, 62, 165, 0.12);
+        background: $bg-primary-soft;
         padding: 10px;
         border-radius: 14px;
     }
@@ -109,14 +170,10 @@ input[type="checkbox"] {
         &:hover,
         &.active {
             color: $text-light;
-            background: rgba(255, 62, 165, 0.12);
-            border-color: $border-pink;
+            background: $bg-primary-soft;
+            border-color: $border-soft;
         }
     }
-}
-
-.qp-main {
-    padding: 30px;
 }
 
 .qp-header,
@@ -159,11 +216,11 @@ input[type="checkbox"] {
 }
 
 .qp-card {
-    background: linear-gradient(180deg, rgba(29, 29, 56, 0.95), rgba(23, 23, 45, 0.95));
-    border: 1px solid $border-pink;
+    background: $gradient-card;
+    border: 1px solid $border-soft;
     border-radius: 22px;
     padding: 20px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 24px 60px $shadow-dark;
 
     h2 {
         margin-top: 0;
@@ -205,13 +262,13 @@ input[type="checkbox"] {
         text-transform: uppercase;
         letter-spacing: 0.06em;
         padding: 14px 12px;
-        border-bottom: 1px solid $border-pink;
+        border-bottom: 1px solid $border-soft;
     }
 
     td {
         padding: 15px 12px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        color: #e9e7f7;
+        border-bottom: 1px solid $border-white-faint;
+        color: $text-body;
         vertical-align: top;
         font-size: 14px;
     }
@@ -223,9 +280,9 @@ input[type="checkbox"] {
     gap: 6px;
     border-radius: 999px;
     padding: 6px 10px;
-    background: rgba(255, 62, 165, 0.13);
+    background: $bg-primary-badge;
     color: $secondary;
-    border: 1px solid $border-pink;
+    border: 1px solid $border-soft;
     font-size: 12px;
     font-weight: 800;
 }
@@ -239,11 +296,11 @@ input[type="checkbox"] {
     border-radius: 12px;
     padding: 10px 14px;
     cursor: pointer;
-    color: #fff;
+    color: $text-white;
     font-size: 13px;
     font-weight: 800;
-    background: linear-gradient(135deg, $primary, $secondary);
-    box-shadow: 0 12px 24px rgba(255, 62, 165, 0.22);
+    background: $gradient-brand;
+    box-shadow: 0 12px 24px $shadow-primary-soft;
     transition: 0.2s ease;
 
     &:hover {
@@ -258,9 +315,9 @@ input[type="checkbox"] {
     }
 
     &-danger {
-        background: rgba(255, 77, 109, 0.12);
-        color: #ff9aac;
-        border: 1px solid rgba(255, 77, 109, 0.3);
+        background: $danger-bg;
+        color: $danger;
+        border: 1px solid $danger-border;
         box-shadow: none;
     }
 }
@@ -276,19 +333,19 @@ input[type="checkbox"] {
     margin-bottom: 18px;
     padding: 14px 16px;
     border-radius: 16px;
-    border: 1px solid rgba(65, 211, 146, 0.25);
-    background: rgba(65, 211, 146, 0.10);
-    color: #aff7d8;
+    border: 1px solid $success-border;
+    background: $success-bg;
+    color: $success;
 }
 
 .qp-code {
     white-space: pre-wrap;
     word-break: break-word;
-    background: #090912;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: $dark-bg-soft;
+    border: 1px solid $border-white-soft;
     border-radius: 16px;
     padding: 16px;
-    color: #efeaff;
+    color: $text-soft;
     font-size: 13px;
     line-height: 1.6;
     max-height: 520px;
@@ -315,7 +372,7 @@ input[type="checkbox"] {
     justify-content: space-between;
     gap: 16px;
     padding: 12px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom: 1px solid $border-white-muted;
 
     span {
         &:first-child {
@@ -340,9 +397,9 @@ input[type="checkbox"] {
     flex-wrap: wrap;
 
     button {
-        border: 1px solid $border-pink;
+        border: 1px solid $border-soft;
         border-radius: 999px;
-        background: rgba(255, 62, 165, 0.08);
+        background: $bg-primary-faint;
         color: $text-muted;
         padding: 10px 14px;
         cursor: pointer;
@@ -350,9 +407,9 @@ input[type="checkbox"] {
 
         &.active,
         &:hover {
-            color: #fff;
-            background: linear-gradient(135deg, $primary, $secondary);
-            box-shadow: 0 12px 24px rgba(255, 62, 165, 0.20);
+            color: $text-white;
+            background: $gradient-brand;
+            box-shadow: 0 12px 24px $shadow-primary-soft;
         }
     }
 }
@@ -376,6 +433,27 @@ input[type="checkbox"] {
     padding: 36px !important;
 }
 
+.nht-queue {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    color: $text-white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &.form-input {
+        border: 1px solid $border-soft;
+        padding: 10px 15px;
+        border-radius: 10px;
+
+        option {
+            background-color: $card-bg-dark;
+        }
+    }
+}
+
 .qp-pagination {
     margin-top: 18px;
     color: $text-muted;
@@ -389,33 +467,11 @@ input[type="checkbox"] {
     a,
     span {
         color: $text-light !important;
-        background: $card-bg !important;
-        border-color: $border-pink !important;
+        background: $card-bg-dark !important;
+        border-color: $border-soft !important;
     }
 }
 
-.nht-queue {
-    border: none;
-    background-color: transparent;
-    outline: none;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &.form-input {
-        border: 1px solid rgba(255, 77, 109, 0.3);
-        padding: 10px 15px;
-        border-radius: 10px;
-
-        option {
-            background-color: $card-bg;
-        }
-    }
-}
-
-/* Modern Bootstrap Laravel Pagination */
 .pagination {
     display: flex;
     justify-content: center;
@@ -431,26 +487,26 @@ input[type="checkbox"] {
 
         &.active {
             .page-link {
-                background: linear-gradient(135deg, $primary, $secondary);
-                color: #ffffff;
+                background: $gradient-brand;
+                color: $text-white;
                 border-color: transparent;
-                box-shadow: 0 0 15px rgba(255, 62, 165, 0.35);
+                box-shadow: 0 0 15px $shadow-primary-strong;
             }
         }
 
         &.disabled {
             .page-link {
-                background: #f3f4f6;
-                color: #9ca3af;
-                border-color: #e5e7eb;
+                background: $pagination-disabled-bg;
+                color: $pagination-disabled-text;
+                border-color: $border-light;
                 cursor: not-allowed;
                 box-shadow: none;
                 transform: none;
 
                 &:hover {
-                    background: #f3f4f6;
-                    color: #9ca3af;
-                    border-color: #e5e7eb;
+                    background: $pagination-disabled-bg;
+                    color: $pagination-disabled-text;
+                    border-color: $border-light;
                 }
             }
         }
@@ -461,24 +517,24 @@ input[type="checkbox"] {
         height: 42px;
         padding: 0 14px;
         border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        background: #ffffff;
-        color: #374151;
+        border: 1px solid $border-light;
+        background: $pagination-bg;
+        color: $pagination-text;
         font-size: 14px;
         font-weight: 600;
         text-decoration: none;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 4px 12px $shadow-light;
         transition: all 0.25s ease;
 
         &:hover {
             background: $primary;
-            color: #ffffff;
+            color: $text-white;
             border-color: $primary;
             transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(255, 62, 165, 0.25);
+            box-shadow: 0 0 15px $shadow-primary-medium;
         }
     }
 }
