@@ -16,6 +16,7 @@ use NHT\QueueMonitor\Console\Commands\Uninstall;
 use NHT\QueueMonitor\Listeners\RecordFailedJob;
 use NHT\QueueMonitor\Listeners\RecordProcessedJob;
 use NHT\QueueMonitor\Listeners\TrackJobStart;
+use Illuminate\Pagination\Paginator;
 
 class QueueMonitorServiceProvider extends ServiceProvider
 {
@@ -40,6 +41,8 @@ class QueueMonitorServiceProvider extends ServiceProvider
         if (! config('queue-monitor.enabled', true)) {
             return;
         }
+
+        Paginator::useBootstrapFive();
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'queue-monitor');
