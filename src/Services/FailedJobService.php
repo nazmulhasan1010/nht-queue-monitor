@@ -9,12 +9,20 @@ use JsonException;
 class FailedJobService
 {
     /**
+     * @return string
+     */
+    private function table(): string
+    {
+        return config('queue.failed.table', 'failed_jobs');
+    }
+
+    /**
      * @param array $filters
      * @return LengthAwarePaginator
      */
     public function filteredPaginate(array $filters): LengthAwarePaginator
     {
-        $q = DB::table('failed_jobs')->orderByDesc('failed_at');
+        $q = DB::table($this->table())->orderByDesc('failed_at');
 
         if (!empty($filters['q'])) {
             $term = '%' . $filters['q'] . '%';
@@ -46,7 +54,16 @@ class FailedJobService
      */
     public function distinctQueues(): mixed
     {
-        return DB::table('failed_jobs')->distinct()->pluck('queue')->filter()->values();
+        return DB::table($this->table())->distinct()->pluck('queue')->filter()->values();
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function find($id): mixed
+    {
+        return DB::table($this->table())->where('id', $id)->first();
     }
 
     /**
@@ -55,7 +72,7 @@ class FailedJobService
      */
     public function findOrFail($id): mixed
     {
-        $job = DB::table('failed_jobs')->where('id', $id)->first();
+        $job = DB::table($this->table())->where('id', $id)->first();
 
         if (!$job) {
             abort(404, 'Failed job not found');
@@ -69,7 +86,7 @@ class FailedJobService
      */
     public function distinctConnections(): mixed
     {
-        return DB::table('failed_jobs')->distinct()->pluck('connection')->filter()->values();
+        return DB::table($this->table())->distinct()->pluck('connection')->filter()->values();
     }
 
     /**
@@ -143,5 +160,35 @@ class FailedJobService
         $text = trim($job->exception);
 
         return mb_strlen($text) > $limit ? mb_substr($text, 0, $limit) . '...' : $text;
+    }
+
+    /**
+     * @param int|string $id
+     * @return bool
+     */
+    public function delete(int|string $id): bool
+    {
+        return DB::table($this->table())->where('id', $id)->delete() > 0;
+    }
+
+    /**
+     * @param array $ids
+     * @return int
+     */
+    public function bulkDelete(array $ids): int
+    {
+        if (empty($ids)) {
+            return 0;
+        }
+
+        return DB::table($this->table())->whereIn('id', $ids)->delete();
+    }
+
+    /**
+     * @return void
+     */
+    public function clear(): void
+    {
+        DB::table($this->table())->truncate();
     }
 }

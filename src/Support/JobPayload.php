@@ -2,15 +2,18 @@
 
 namespace NHT\QueueMonitor\Support;
 
+use JsonException;
+
 class JobPayload
 {
     /**
      * @param string|null $rawPayload
      * @return array
+     * @throws JsonException
      */
     public static function fromRaw(?string $rawPayload): array
     {
-        $payload = json_decode($rawPayload ?: '{}', true);
+        $payload = json_decode($rawPayload ?: '{}', true, 512, JSON_THROW_ON_ERROR);
 
         return is_array($payload) ? $payload : [];
     }

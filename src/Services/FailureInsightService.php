@@ -10,7 +10,7 @@ class FailureInsightService
      */
     public function insight(?string $exception): string
     {
-        $text = strtolower((string) $exception);
+        $text = strtolower((string)$exception);
 
         return match (true) {
             str_contains($text, 'connection refused') => 'Possible database/redis/service connection issue. Check service availability and credentials.',

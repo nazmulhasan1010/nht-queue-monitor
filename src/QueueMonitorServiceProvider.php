@@ -3,6 +3,7 @@
 namespace NHT\QueueMonitor;
 
 use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
@@ -10,16 +11,18 @@ use Illuminate\Support\ServiceProvider;
 use NHT\QueueMonitor\Console\Commands\Install;
 use NHT\QueueMonitor\Console\Commands\QueueMonitorCheckAlertsCommand;
 use NHT\QueueMonitor\Console\Commands\QueueMonitorHealthCommand;
+use NHT\QueueMonitor\Console\Commands\QueueMonitorPruneCommand;
 use NHT\QueueMonitor\Console\Commands\Uninstall;
 use NHT\QueueMonitor\Listeners\RecordFailedJob;
 use NHT\QueueMonitor\Listeners\RecordProcessedJob;
+use NHT\QueueMonitor\Listeners\TrackJobStart;
 
 class QueueMonitorServiceProvider extends ServiceProvider
 {
     /**
      *
      */
-    const QUEUE_MONITOR_MIGRATIONS = 'queue-monitor-migrations';
+    public const QUEUE_MONITOR_MIGRATIONS = 'queue-monitor-migrations';
 
     /**
      * @return void
@@ -42,11 +45,17 @@ class QueueMonitorServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'queue-monitor');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
+        Event::listen(JobProcessing::class, TrackJobStart::class);
         Event::listen(JobProcessed::class, RecordProcessedJob::class);
         Event::listen(JobFailed::class, RecordFailedJob::class);
 
         if ($this->app->runningInConsole()) {
-            $commands = [QueueMonitorCheckAlertsCommand::class, Install::class, Uninstall::class,];
+            $commands = [
+                QueueMonitorCheckAlertsCommand::class,
+                QueueMonitorPruneCommand::class,
+                Install::class,
+                Uninstall::class,
+            ];
 
             if (class_exists(QueueMonitorHealthCommand::class)) {
                 $commands[] = QueueMonitorHealthCommand::class;
@@ -61,6 +70,6 @@ class QueueMonitorServiceProvider extends ServiceProvider
 
         $this->publishes([__DIR__ . '/../config/queue-monitor.php' => config_path('queue-monitor.php')], 'queue-monitor-config');
         $this->publishes([__DIR__ . '/../database/migrations' => database_path('migrations')], '' . self::QUEUE_MONITOR_MIGRATIONS . '');
-        $this->publishes([__DIR__ . '/../public/vendor/queue-monitor' => public_path('vendor/queue-monitor')], 'queue-monitor-assets');
+        $this->publishes([__DIR__ . '/../public/vendor/queue-monitor' => public_path('vendor/nht/queue-monitor')], 'queue-monitor-assets');
     }
 }

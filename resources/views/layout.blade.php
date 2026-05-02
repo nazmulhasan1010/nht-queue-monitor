@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Queue Pulse</title>
+    <link rel="icon" type="image/png" href="{{ asset('vendor/nht/queue-monitor/logos/nht.png') }}">
     @queuePulseAssets
     @stack('head')
 </head>
@@ -11,11 +12,9 @@
 <div class="qp-shell">
     <aside class="qp-sidebar">
         <div class="qp-brand">
-            <div class="qp-brand-icon">QP</div>
-            <div>
-                <div class="qp-brand-title">Queue Pulse</div>
-                <div class="qp-brand-subtitle">Laravel queue monitor</div>
-            </div>
+            <a href="{{ route('queue-monitor.dashboard') }}">
+                <img src="{{ asset('vendor/nht/queue-monitor/logos/nht-qm.png') }}" alt="Queue Pulse" class="qp-brand-logo">
+            </a>
         </div>
 
         <nav class="qp-nav">
@@ -46,5 +45,8 @@
         @yield('content')
     </main>
 </div>
+
+@include('queue-monitor::partials.confirm-modal')
+
 </body>
 </html>

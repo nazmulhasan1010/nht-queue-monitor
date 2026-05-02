@@ -9,13 +9,13 @@
 
         <div class="qp-actions">
             <form method="POST" action="{{ route('queue-monitor.failed.retry-all') }}"
-                  onsubmit="return confirm('Retry all failed jobs?');">
+                  onsubmit="return qpConfirm('Retry all failed jobs?', this, 'Retry All', 'qp-btn-secondary');">
                 @csrf
                 <button type="submit" class="qp-btn">Retry All</button>
             </form>
 
             <form method="POST" action="{{ route('queue-monitor.failed.clear') }}"
-                  onsubmit="return confirm('Clear all failed jobs? This cannot be undone.');">
+                  onsubmit="return qpConfirm('Clear all failed jobs? This cannot be undone.', this, 'Clear All', 'qp-btn-danger');">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="qp-btn qp-btn-danger">Clear All</button>
@@ -68,7 +68,7 @@
 
     <form method="POST"
           action="{{ route('queue-monitor.failed.bulk-destroy') }}"
-          onsubmit="return confirm('Delete selected failed jobs?');">
+          onsubmit="return qpConfirm('Delete selected failed jobs?', this, 'Delete Selected', 'qp-btn-danger');">
         @csrf
         @method('DELETE')
 
@@ -153,7 +153,7 @@
 
                                     <form method="POST"
                                           action="{{ route('queue-monitor.failed.destroy', $job->id) }}"
-                                          onsubmit="return confirm('Delete this failed job?');">
+                                          onsubmit="return qpConfirm('Delete this failed job?', this, 'Delete', 'qp-btn-danger');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="qp-btn qp-btn-sm qp-btn-danger">

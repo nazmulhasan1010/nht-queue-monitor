@@ -2,7 +2,7 @@
 
 namespace NHT\QueueMonitor\Http\Controllers\Api;
 
-use http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;

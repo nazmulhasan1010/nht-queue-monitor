@@ -6,8 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class QueueMonitorJob extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'queue_monitor_jobs';
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'uuid',
         'connection',
@@ -25,6 +31,9 @@ class QueueMonitorJob extends Model
         'finished_at',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'payload' => 'array',
         'tags' => 'array',

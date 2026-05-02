@@ -38,7 +38,8 @@
                         <td>{{ $alert->created_at }}</td>
                         <td>
                             @unless($alert->resolved_at)
-                                <form method="POST" action="{{ route('queue-monitor.alerts.resolve', $alert->id) }}">
+                                <form method="POST" action="{{ route('queue-monitor.alerts.resolve', $alert->id) }}"
+                                      onsubmit="return qpConfirm('Mark this alert as resolved?', this, 'Resolve', 'qp-btn-secondary');">
                                     @csrf
                                     <button class="qp-btn qp-btn-sm">Resolve</button>
                                 </form>

@@ -1,74 +1,115 @@
-# Laravel Queue Pulse
+# NHT Queue Monitor (Queue Pulse)
 
-Modern dark + pink Laravel queue monitor package.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/nht/queue-monitor.svg?style=flat-square)](https://packagist.org/packages/nht/queue-monitor)
+[![Total Downloads](https://img.shields.io/packagist/dt/nht/queue-monitor.svg?style=flat-square)](https://packagist.org/packages/nht/queue-monitor)
+[![License](https://img.shields.io/packagist/l/nht/queue-monitor.svg?style=flat-square)](https://packagist.org/packages/nht/queue-monitor)
 
-## Features
+NHT Queue Monitor is a modern, enterprise-grade queue monitoring package for Laravel. Designed as a powerful alternative to Laravel Horizon, it provides deep insights into your queue system with a beautiful dark UI, real-time capabilities, and advanced diagnostics.
 
-- Failed jobs dashboard
-- Failed job detail viewer
-- Retry single failed job
-- Retry all failed jobs
-- Delete failed job
-- Bulk delete
-- Clear all failed jobs
-- Payload viewer
-- Exception viewer
-- Copy buttons
-- Failure charts
-- Filters/search
-- Audit logs
-- Settings page
-- Mail/Slack notification foundation
-- Access control middleware
-- CSV export
+## 🚀 Features
 
-## Install from local package
+- **Comprehensive Dashboard**: Real-time metrics and failure charts.
+- **Failed Job Management**: 
+    - Detailed payload and exception viewer.
+    - Single/Bulk Retry and Delete actions.
+    - Clear all functionality with confirmation.
+- **Smart Tracking**: 
+    - Track both successful and failed jobs.
+    - Customizable data retention (pruning).
+- **Advanced Alerting**: 
+    - Threshold-based alerts (e.g., alert if >20 failures in 1h).
+    - Multi-channel notifications (Mail, Slack).
+- **Security & Access Control**: 
+    - Email-based allowlist.
+    - Integrated Laravel Gate support.
+- **Enterprise Ready**: 
+    - Multi-tenant support.
+    - Real-time broadcasting (Reverb, Pusher, Soketi).
+    - CSV/Export capabilities.
+    - Audit logs for all monitor actions.
 
-In your Laravel app `composer.json`:
-
-```json
-{
-  "repositories": [
-    {
-      "type": "path",
-      "url": "packages/queue-monitor"
-    }
-  ],
-  "require": {
-    "your-vendor/queue-monitor": "*"
-  }
-}
-```
-
-Then:
+## 📦 Installation
 
 ```bash
-composer update your-vendor/queue-monitor
-php artisan vendor:publish --tag=queue-monitor-config
-php artisan vendor:publish --tag=queue-monitor-assets
-php artisan vendor:publish --tag=queue-monitor-migrations
+composer require nht/queue-monitor
+```
+
+### Finalize Installation
+Run the following commands to publish assets and migrate:
+```bash
+php artisan nht-queue-monitor:published
 php artisan migrate
 ```
 
-Visit:
-
-```txt
-/queue-monitor
+### Uninstallation
+If you need to remove the package and its assets:
+```bash
+php artisan nht-queue-monitor:remove
 ```
 
-## Access Control
+## ⚙️ Configuration
 
-Use one or both:
+The package can be configured entirely via environment variables in your `.env` file.
 
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `QUEUE_MONITOR_ENABLED` | `true` | Enable/Disable the monitor. |
+| `QUEUE_MONITOR_ROUTE_PREFIX` | `queue-monitor` | URL path for the dashboard. |
+| `QUEUE_MONITOR_ALLOWED_EMAILS` | `null` | Comma-separated emails for access. |
+| `QUEUE_MONITOR_ENABLE_GATE` | `false` | Enable Laravel Gate protection. |
+| `QUEUE_MONITOR_TRACK_SUCCESSFUL_JOBS` | `false` | Log successful jobs to DB. |
+| `QUEUE_MONITOR_STORE_JOB_PAYLOAD` | `false` | Save full payload for all jobs. |
+| `QUEUE_MONITOR_JOB_RETENTION_DAYS` | `30` | Auto-delete records older than X days. |
+| `QUEUE_MONITOR_ALERTS_ENABLED` | `true` | Enable threshold-based alerting. |
+| `QUEUE_MONITOR_NOTIFICATIONS_ENABLED` | `false` | Enable Slack/Mail notifications. |
+| `QUEUE_MONITOR_BROADCAST_ENABLED` | `false` | Enable real-time UI updates. |
+
+## 🛡️ Security
+
+### Email Access
+Add specific users who can access the dashboard:
 ```env
-QUEUE_MONITOR_ALLOWED_EMAILS=admin@example.com,dev@example.com
+QUEUE_MONITOR_ALLOWED_EMAILS=admin@example.com,dev@nht.com
+```
+
+### Laravel Gate
+For complex authorization, enable the Gate in `.env`:
+```env
 QUEUE_MONITOR_ENABLE_GATE=true
 ```
-
-In `AuthServiceProvider`:
-
+Then define the `viewQueueMonitor` gate in your `AuthServiceProvider`:
 ```php
 Gate::define('viewQueueMonitor', function ($user) {
-    return $user->email === 'admin@example.com';
+    return $user->isAdmin(); 
 });
 ```
+
+## ⏰ Scheduling & Maintenance
+
+To keep your dashboard clean and receive alerts, add these to your `app/Console/Kernel.php` (or `routes/console.php` in Laravel 11+):
+
+```php
+// Check for alert thresholds every 5 minutes
+$schedule->command('queue-monitor:check-alerts')->everyFiveMinutes();
+
+// Run health checks every 10 minutes
+$schedule->command('queue-monitor:health')->everyTenMinutes();
+
+// Prune old data daily
+$schedule->command('queue-monitor:prune')->daily();
+```
+
+## 📊 Usage
+
+Once installed, visit `/queue-monitor` in your browser.
+
+- **Dashboard**: High-level overview of your queue health.
+- **Failed Jobs**: The core workstation for inspecting and resolving issues.
+- **Audit Logs**: See who retried or deleted which job and when.
+- **System**: Detailed diagnostics of your worker nodes.
+
+## 🤝 Contributing
+Contributions are welcome! Please feel free to submit Pull Requests.
+
+## 📜 License
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

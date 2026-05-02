@@ -67,7 +67,7 @@ return [
 
     'assets' => [
         'use_built_assets' => true,
-        'css' => 'vendor/queue-monitor/css/style.css',
-        'js' => 'vendor/queue-monitor/js/app.js',
+        'css' => 'vendor/nht/queue-monitor/scss/style.css',
+        'js' => 'vendor/nht/queue-monitor/js/app.js',
     ],
 ];

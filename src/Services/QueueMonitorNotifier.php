@@ -50,8 +50,7 @@ class QueueMonitorNotifier
     protected function sendMail(string $title, string $message, array $meta = []): void
     {
         Mail::raw($message . "\n\n" . json_encode($meta, JSON_PRETTY_PRINT), function ($mail) use ($title) {
-            $mail->to(config('queue-monitor.notifications.mail_to'))
-                ->subject($title);
+            $mail->to(config('queue-monitor.notifications.mail_to'))->subject($title);
         });
     }
 }

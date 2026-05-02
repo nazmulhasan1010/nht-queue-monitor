@@ -13,7 +13,7 @@ class EventLogger
      */
     public function log(string $eventType, array $data = []): void
     {
-        if (! config('queue-monitor.audit.enabled', true)) {
+        if (!config('queue-monitor.audit.enabled', true)) {
             return;
         }
 

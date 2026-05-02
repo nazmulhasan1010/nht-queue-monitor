@@ -41,4 +41,8 @@ Route::group([
 
     Route::get('/exports/failed-jobs', [ExportController::class, 'failedJobs'])->name('queue-monitor.exports.failed-jobs');
     Route::get('/exports/events', [ExportController::class, 'events'])->name('queue-monitor.exports.events');
+
+    // API Routes
+    Route::get('/api/live', [\NHT\QueueMonitor\Http\Controllers\Api\LiveController::class, 'index'])->name('queue-monitor.api.live');
+    Route::get('/api/trend', [\NHT\QueueMonitor\Http\Controllers\Api\StatsController::class, 'trend'])->name('queue-monitor.api.trend');
 });

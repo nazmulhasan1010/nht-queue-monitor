@@ -7,6 +7,8 @@ use NHT\QueueMonitor\Events\QueueMonitorJobRecorded;
 use NHT\QueueMonitor\Models\QueueMonitorJob;
 use NHT\QueueMonitor\Support\JobPayload;
 
+use NHT\QueueMonitor\Support\JobTimer;
+
 class RecordProcessedJob
 {
     /**
@@ -20,9 +22,10 @@ class RecordProcessedJob
         }
 
         $payload = JobPayload::fromRaw($event->job->getRawBody());
+        $uuid = JobPayload::uuid($payload);
 
         $job = QueueMonitorJob::query()->create([
-            'uuid' => JobPayload::uuid($payload),
+            'uuid' => $uuid,
             'connection' => $event->connectionName,
             'queue' => $event->job->getQueue(),
             'node_name' => config('queue-monitor.node.name'),
@@ -30,7 +33,7 @@ class RecordProcessedJob
             'job_name' => JobPayload::displayName($payload),
             'status' => 'processed',
             'attempts' => method_exists($event->job, 'attempts') ? $event->job->attempts() : null,
-            'duration_ms' => null,
+            'duration_ms' => $uuid ? JobTimer::stop($uuid) : null,
             'payload' => config('queue-monitor.tracking.store_payload', false) ? $payload : null,
             'tags' => $payload['tags'] ?? null,
             'finished_at' => now(),

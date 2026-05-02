@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\DB;
 class QueueStatsService
 {
     /**
+     * @return string
+     */
+    private function table(): string
+    {
+        return config('queue.failed.table', 'failed_jobs');
+    }
+
+    /**
      * @return array
      */
     public function summary(): array
@@ -15,10 +23,10 @@ class QueueStatsService
         $today = Carbon::today();
 
         return [
-            'total_failed' => DB::table('failed_jobs')->count(),
-            'failed_today' => DB::table('failed_jobs')->whereDate('failed_at', $today)->count(),
-            'failed_this_week' => DB::table('failed_jobs')->where('failed_at', '>=', now()->startOfWeek())->count(),
-            'latest_failed_at' => DB::table('failed_jobs')->max('failed_at'),
+            'total_failed' => DB::table($this->table())->count(),
+            'failed_today' => DB::table($this->table())->whereDate('failed_at', $today)->count(),
+            'failed_this_week' => DB::table($this->table())->where('failed_at', '>=', now()->startOfWeek())->count(),
+            'latest_failed_at' => DB::table($this->table())->max('failed_at'),
         ];
     }
 
@@ -28,6 +36,6 @@ class QueueStatsService
      */
     public function latestFailedJobs(int $limit = 5): mixed
     {
-        return DB::table('failed_jobs')->orderByDesc('failed_at')->limit($limit)->get();
+        return DB::table($this->table())->orderByDesc('failed_at')->limit($limit)->get();
     }
 }

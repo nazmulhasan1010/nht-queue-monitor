@@ -3,6 +3,7 @@
 namespace NHT\QueueMonitor\Actions;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class RetryAllFailedJobs
 {
@@ -11,8 +12,13 @@ class RetryAllFailedJobs
      */
     public function execute(): int
     {
-        return Artisan::call('queue:retry', [
-            'id' => ['all'],
-        ]);
+        try {
+            return Artisan::call('queue:retry', [
+                'id' => ['all'],
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Queue Monitor: Failed to retry all jobs. " . $e->getMessage());
+            return 1;
+        }
     }
 }

@@ -12,7 +12,7 @@ class AlertService
      */
     public function check(): array
     {
-        if (! config('queue-monitor.alerts.enabled', true)) {
+        if (!config('queue-monitor.alerts.enabled', true)) {
             return [];
         }
 
@@ -21,7 +21,7 @@ class AlertService
         $failed24h = DB::table('failed_jobs')->where('failed_at', '>=', now()->subDay())->count();
         $failed1h = DB::table('failed_jobs')->where('failed_at', '>=', now()->subHour())->count();
 
-        if ($failed24h >= (int) config('queue-monitor.alerts.failed_jobs_24h', 20)) {
+        if ($failed24h >= (int)config('queue-monitor.alerts.failed_jobs_24h', 20)) {
             $created[] = $this->createOrUpdate(
                 'failed_jobs_24h',
                 'critical',
@@ -31,7 +31,7 @@ class AlertService
             );
         }
 
-        if ($failed1h >= (int) config('queue-monitor.alerts.failed_jobs_1h', 5)) {
+        if ($failed1h >= (int)config('queue-monitor.alerts.failed_jobs_1h', 5)) {
             $created[] = $this->createOrUpdate(
                 'failed_jobs_1h',
                 'warning',

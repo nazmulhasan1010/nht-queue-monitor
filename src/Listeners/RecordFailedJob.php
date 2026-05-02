@@ -8,6 +8,8 @@ use NHT\QueueMonitor\Models\QueueMonitorJob;
 use NHT\QueueMonitor\Services\FailureInsightService;
 use NHT\QueueMonitor\Support\JobPayload;
 
+use NHT\QueueMonitor\Support\JobTimer;
+
 class RecordFailedJob
 {
     /**
@@ -21,10 +23,11 @@ class RecordFailedJob
         }
 
         $payload = JobPayload::fromRaw($event->job->getRawBody());
+        $uuid = JobPayload::uuid($payload);
         $exception = (string) $event->exception;
 
         $job = QueueMonitorJob::query()->create([
-            'uuid' => JobPayload::uuid($payload),
+            'uuid' => $uuid,
             'connection' => $event->connectionName,
             'queue' => $event->job->getQueue(),
             'node_name' => config('queue-monitor.node.name'),
@@ -32,7 +35,7 @@ class RecordFailedJob
             'job_name' => JobPayload::displayName($payload),
             'status' => 'failed',
             'attempts' => method_exists($event->job, 'attempts') ? $event->job->attempts() : null,
-            'duration_ms' => null,
+            'duration_ms' => $uuid ? JobTimer::stop($uuid) : null,
             'exception' => config('queue-monitor.tracking.store_exception', true) ? $exception : null,
             'insight' => app(FailureInsightService::class)->insight($exception),
             'payload' => config('queue-monitor.tracking.store_payload', false) ? $payload : null,
