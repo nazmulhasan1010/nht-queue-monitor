@@ -16,6 +16,8 @@ class QueueMonitorJob extends Model
      */
     protected $fillable = [
         'uuid',
+        'batch_id',
+        'parent_id',
         'connection',
         'queue',
         'node_name',

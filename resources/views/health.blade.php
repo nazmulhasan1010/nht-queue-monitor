@@ -99,8 +99,7 @@
                     $total = (int) ($map[$i] ?? 0);
                     $opacity = 0.15 + (($total / $max) * 0.85);
                 @endphp
-                <div title="{{ $i }}:00 - {{ $total }} failures"
-                     style="height:54px;border-radius:14px;background:rgba(255,62,165,{{ $opacity }});display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">
+                <div title="{{ $i }}:00 - {{ $total }} failures" style="height:54px;border-radius:14px;background:rgba(255,62,165,{{ $opacity }});display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">
                     {{ $i }}
                 </div>
             @endfor

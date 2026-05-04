@@ -2,6 +2,7 @@
 
 namespace NHT\QueueMonitor\Actions;
 
+use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 
@@ -17,8 +18,8 @@ class RetryFailedJob
             return Artisan::call('queue:retry', [
                 'id' => [(string)$id],
             ]);
-        } catch (\Exception $e) {
-            Log::error("Queue Monitor: Failed to retry job {$id}. " . $e->getMessage());
+        } catch (Exception $e) {
+            Log::error("Queue Monitor: Failed to retry job $id. " . $e->getMessage());
             return 1;
         }
     }

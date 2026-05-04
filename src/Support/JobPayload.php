@@ -38,4 +38,13 @@ class JobPayload
     {
         return $payload['uuid'] ?? null;
     }
+
+    /**
+     * @param array $payload
+     * @return string|null
+     */
+    public static function batchId(array $payload): ?string
+    {
+        return $payload['batch_id'] ?? null;
+    }
 }

@@ -3,10 +3,12 @@
     <properties>
       <sourceFilesUrls>
         <item url="file://$PROJECT_DIR$/public/vendor/queue-monitor/scss/style.css.map" />
+        <item url="file://$PROJECT_DIR$/resources/assets/scss/app.css.map" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/public/vendor/queue-monitor/scss/style.css.map" />
+      <root url="file://$PROJECT_DIR$/resources/assets/scss/app.css.map" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "variables" as *;
 
 * {
@@ -139,6 +140,48 @@ input[type="checkbox"] {
   margin-bottom: 20px;
 }
 
+.qp-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.qp-filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: $qp-muted;
+    letter-spacing: .05em;
+  }
+}
+
+.form-input {
+  background: rgba(0, 0, 0, .2);
+  border: 1px solid $qp-border;
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: white;
+  width: 100%;
+  font-size: 13px;
+  transition: .2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $qp-pink;
+    background: rgba($qp-pink, .05);
+  }
+
+  &::placeholder {
+    color: rgba(255, 255, 255, .3);
+  }
+}
+
 .qp-card {
   background: linear-gradient(180deg, rgba($qp-card-2, .95), rgba($qp-card, .95));
   border: 1px solid $qp-border;
@@ -239,7 +282,7 @@ input[type="checkbox"] {
 
 .qp-btn-danger {
   background: rgba($qp-danger, .12);
-  color: lighten($qp-danger, 18%);
+  color: color.scale($qp-danger, $lightness: 18%);
   border: 1px solid rgba($qp-danger, .3);
   box-shadow: none;
 }
@@ -257,7 +300,7 @@ input[type="checkbox"] {
   border-radius: 16px;
   border: 1px solid rgba($qp-success, .25);
   background: rgba($qp-success, .10);
-  color: lighten($qp-success, 20%);
+  color: color.scale($qp-success, $lightness: 20%);
 }
 
 .qp-code {
@@ -346,6 +389,51 @@ input[type="checkbox"] {
   text-align: center;
   color: $qp-muted !important;
   padding: 36px !important;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.qp-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, .3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: qp-spin .8s linear infinite;
+}
+
+@keyframes qp-spin {
+  to { transform: rotate(360deg); }
+}
+
+.qp-ai-content {
+  background: rgba(0, 0, 0, .2);
+  border-radius: 16px;
+  padding: 20px;
+  line-height: 1.7;
+  font-size: 14px;
+  color: #e2e2ff;
+  border: 1px solid rgba($qp-pink, .1);
+}
+
+.qp-loading-text {
+  color: $qp-muted;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qp-error-text {
+  color: color.scale($qp-danger, $lightness: 10%);
+}
+
+#qp-ai-analysis-card {
+  margin-top: 16px;
+  border: 1px solid rgba($qp-pink, .3);
+  background: linear-gradient(135deg, rgba($qp-card, .98), rgba($qp-card-2, .98));
 }
 
 .qp-pagination {

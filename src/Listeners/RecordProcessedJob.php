@@ -3,6 +3,7 @@
 namespace NHT\QueueMonitor\Listeners;
 
 use Illuminate\Queue\Events\JobProcessed;
+use JsonException;
 use NHT\QueueMonitor\Events\QueueMonitorJobRecorded;
 use NHT\QueueMonitor\Models\QueueMonitorJob;
 use NHT\QueueMonitor\Support\JobPayload;
@@ -14,6 +15,7 @@ class RecordProcessedJob
     /**
      * @param JobProcessed $event
      * @return void
+     * @throws JsonException
      */
     public function handle(JobProcessed $event): void
     {
@@ -24,8 +26,9 @@ class RecordProcessedJob
         $payload = JobPayload::fromRaw($event->job->getRawBody());
         $uuid = JobPayload::uuid($payload);
 
-        $job = QueueMonitorJob::query()->create([
+        $job = QueueMonitorJob::create([
             'uuid' => $uuid,
+            'batch_id' => JobPayload::batchId($payload),
             'connection' => $event->connectionName,
             'queue' => $event->job->getQueue(),
             'node_name' => config('queue-monitor.node.name'),

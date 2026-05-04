@@ -3,6 +3,7 @@
 namespace NHT\QueueMonitor\Listeners;
 
 use Illuminate\Queue\Events\JobFailed;
+use JsonException;
 use NHT\QueueMonitor\Events\QueueMonitorJobRecorded;
 use NHT\QueueMonitor\Models\QueueMonitorJob;
 use NHT\QueueMonitor\Services\FailureInsightService;
@@ -15,6 +16,7 @@ class RecordFailedJob
     /**
      * @param JobFailed $event
      * @return void
+     * @throws JsonException
      */
     public function handle(JobFailed $event): void
     {
@@ -26,8 +28,9 @@ class RecordFailedJob
         $uuid = JobPayload::uuid($payload);
         $exception = (string) $event->exception;
 
-        $job = QueueMonitorJob::query()->create([
+        $job = QueueMonitorJob::create([
             'uuid' => $uuid,
+            'batch_id' => JobPayload::batchId($payload),
             'connection' => $event->connectionName,
             'queue' => $event->job->getQueue(),
             'node_name' => config('queue-monitor.node.name'),

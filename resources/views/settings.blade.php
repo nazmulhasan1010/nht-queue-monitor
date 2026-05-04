@@ -23,10 +23,14 @@
             <div class="qp-meta-row">
                 <span>CSV Export</span><span>{{ data_get($config, 'allow_export') ? 'Enabled' : 'Disabled' }}</span>
             </div>
-            <div class="qp-meta-row"><span>Failed Jobs</span><span><a
-                            href="{{ route('queue-monitor.exports.failed-jobs') }}">Download</a></span></div>
-            <div class="qp-meta-row"><span>Audit Events</span><span><a
-                            href="{{ route('queue-monitor.exports.events') }}">Download</a></span></div>
+            <div class="qp-meta-row">
+                <span>Failed Jobs</span>
+                <span><a href="{{ route('queue-monitor.exports.failed-jobs') }}">Download</a></span>
+            </div>
+            <div class="qp-meta-row">
+                <span>Audit Events</span>
+                <span><a href="{{ route('queue-monitor.exports.events') }}">Download</a></span>
+            </div>
         </div>
     </div>
 

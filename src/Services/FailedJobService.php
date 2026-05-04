@@ -27,16 +27,25 @@ class FailedJobService
         if (!empty($filters['q'])) {
             $term = '%' . $filters['q'] . '%';
             $q->where(function ($w) use ($term) {
-                $w->where('payload', 'like', $term)->orWhere('exception', 'like', $term)->orWhere('uuid', 'like', $term);
+                $w->where('payload', 'like', $term)
+                  ->orWhere('exception', 'like', $term)
+                  ->orWhere('uuid', 'like', $term)
+                  ->orWhere('id', 'like', $term);
             });
         }
 
         if (!empty($filters['queue'])) {
-            $q->where('queue', $filters['queue']);
+            $queues = is_array($filters['queue']) ? $filters['queue'] : explode(',', $filters['queue']);
+            $q->whereIn('queue', array_filter($queues));
         }
 
         if (!empty($filters['connection'])) {
-            $q->where('connection', $filters['connection']);
+            $connections = is_array($filters['connection']) ? $filters['connection'] : explode(',', $filters['connection']);
+            $q->whereIn('connection', array_filter($connections));
+        }
+
+        if (!empty($filters['exception'])) {
+            $q->where('exception', 'like', '%' . $filters['exception'] . '%');
         }
 
         if (!empty($filters['from'])) {
@@ -159,7 +168,15 @@ class FailedJobService
 
         $text = trim($job->exception);
 
-        return mb_strlen($text) > $limit ? mb_substr($text, 0, $limit) . '...' : $text;
+        if (preg_match('/^[^:]+:\s*(.*?)\s+in\s+/s', $text, $matches)) {
+            return trim($matches[1]);
+        }
+
+        if (preg_match('/^[^:]+:\s*(.*)$/s', $text, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return $text;
     }
 
     /**

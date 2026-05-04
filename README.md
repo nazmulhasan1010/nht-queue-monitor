@@ -10,9 +10,13 @@ NHT Queue Monitor is a modern, enterprise-grade queue monitoring package for Lar
 
 - **Comprehensive Dashboard**: Real-time metrics and failure charts.
 - **Failed Job Management**: 
+    - **AI-Powered Failure Insight**: Get automatic root-cause analysis for failed jobs using OpenAI or Anthropic.
+    - **Payload Editor on Retry**: Modify job parameters directly from the UI before retrying a job.
+    - **Job Batch & Chain Flow**: Visualize relationships between jobs in the same batch or chain.
     - Detailed payload and exception viewer.
     - Single/Bulk Retry and Delete actions.
-    - Clear all functionality with confirmation.
+    - Clear all functionality with premium dark-themed confirmation modals.
+- **Advanced Filtering**: Grid-based filtering by date, queue, connection, and keyword search.
 - **Smart Tracking**: 
     - Track both successful and failed jobs.
     - Customizable data retention (pruning).
@@ -37,7 +41,7 @@ composer require nht/queue-monitor
 ### Finalize Installation
 Run the following commands to publish assets and migrate:
 ```bash
-php artisan nht-queue-monitor:published
+php artisan nht-queue-monitor:published --force
 php artisan migrate
 ```
 
@@ -54,6 +58,9 @@ The package can be configured entirely via environment variables in your `.env` 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `QUEUE_MONITOR_ENABLED` | `true` | Enable/Disable the monitor. |
+| `QUEUE_MONITOR_AI_ENABLED` | `false` | Enable AI-powered failure analysis. |
+| `QUEUE_MONITOR_AI_PROVIDER` | `openai` | AI provider (`openai` or `anthropic`). |
+| `QUEUE_MONITOR_AI_KEY` | `null` | Your AI provider API key. |
 | `QUEUE_MONITOR_ROUTE_PREFIX` | `queue-monitor` | URL path for the dashboard. |
 | `QUEUE_MONITOR_ALLOWED_EMAILS` | `null` | Comma-separated emails for access. |
 | `QUEUE_MONITOR_ENABLE_GATE` | `false` | Enable Laravel Gate protection. |
@@ -107,6 +114,39 @@ Once installed, visit `/queue-monitor` in your browser.
 - **Failed Jobs**: The core workstation for inspecting and resolving issues.
 - **Audit Logs**: See who retried or deleted which job and when.
 - **System**: Detailed diagnostics of your worker nodes.
+
+## 🤖 AI Failure Analysis
+
+Queue Pulse integrates with OpenAI and Anthropic to provide intelligent insights into your failed jobs.
+
+### Setup
+1. Enable the feature in your `.env`:
+```env
+QUEUE_MONITOR_AI_ENABLED=true
+QUEUE_MONITOR_AI_PROVIDER=openai # or anthropic
+QUEUE_MONITOR_AI_KEY=your-api-key-here
+```
+2. (Optional) Customize the model:
+```env
+QUEUE_MONITOR_AI_MODEL=gpt-4o-mini
+```
+
+### How to Use
+1. Navigate to the **Failed Jobs** list.
+2. Click **View** on any failed job.
+3. Click the **AI Analysis** button in the header.
+4. The system will send the job name, exception, and payload to the AI to generate a root-cause analysis and a suggested fix.
+
+## 🛠️ Payload Editor (Edit & Retry)
+
+Sometimes a job fails because of a typo or missing data. You can fix it without leaving the dashboard:
+
+1. Click **View** on a failed job.
+2. Click **Edit & Retry** in the header.
+3. Modify the JSON payload in the modal.
+4. Click **Update & Retry Now**.
+
+The job will be updated in the database and immediately pushed back to the queue with your new data.
 
 ## 🔌 API Reference
 

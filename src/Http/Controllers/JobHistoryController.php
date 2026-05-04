@@ -13,9 +13,9 @@ class JobHistoryController extends Controller
      * @param Request $request
      * @return View
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        $query = QueueMonitorJob::query()->latest('finished_at');
+        $query = QueueMonitorJob::latest('finished_at');
 
         if ($request->filled('status')) {
             $query->where('status', $request->get('status'));
@@ -37,7 +37,7 @@ class JobHistoryController extends Controller
 
         return view('queue-monitor::jobs.index', [
             'jobs' => $query->paginate((int) config('queue-monitor.pagination', 20))->withQueryString(),
-            'queues' => QueueMonitorJob::query()->distinct()->pluck('queue')->filter()->values(),
+            'queues' => QueueMonitorJob::distinct()->pluck('queue')->filter()->values(),
             'filters' => $request->only(['status', 'queue', 'q']),
         ]);
     }
@@ -46,10 +46,10 @@ class JobHistoryController extends Controller
      * @param int|string $id
      * @return View
      */
-    public function show(int|string $id)
+    public function show(int|string $id): View
     {
         return view('queue-monitor::jobs.show', [
-            'job' => QueueMonitorJob::query()->findOrFail($id),
+            'job' => QueueMonitorJob::findOrFail($id),
         ]);
     }
 }

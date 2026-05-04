@@ -5,9 +5,9 @@ return [
     'route_prefix' => env('QUEUE_MONITOR_ROUTE_PREFIX', 'queue-monitor'),
 
     'middleware' => [
-        'web',
-        'auth',
-        \NHT\QueueMonitor\Http\Middleware\QueueMonitorAccess::class,
+//        'web',
+//        'auth',
+//        \NHT\QueueMonitor\Http\Middleware\QueueMonitorAccess::class,
     ],
 
     'pagination' => 20,
@@ -55,6 +55,13 @@ return [
 
     'audit' => ['enabled' => true],
 
+    'ai' => [
+        'enabled' => env('QUEUE_MONITOR_AI_ENABLED', false),
+        'provider' => env('QUEUE_MONITOR_AI_PROVIDER', 'openai'), // openai, anthropic
+        'api_key' => env('QUEUE_MONITOR_AI_KEY'),
+        'model' => env('QUEUE_MONITOR_AI_MODEL', 'gpt-4o-mini'),
+    ],
+
     'notifications' => [
         'enabled' => env('QUEUE_MONITOR_NOTIFICATIONS_ENABLED', false),
         'channels' => [
@@ -67,7 +74,7 @@ return [
 
     'assets' => [
         'use_built_assets' => true,
-        'css' => 'vendor/nht/queue-monitor/scss/style.css',
-        'js' => 'vendor/nht/queue-monitor/js/app.js',
+        'css' => 'vendor/queue-monitor/scss/style.css',
+        'js' => 'vendor/queue-monitor/js/app.js',
     ],
 ];

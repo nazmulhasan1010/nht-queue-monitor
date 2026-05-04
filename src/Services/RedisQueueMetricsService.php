@@ -17,9 +17,9 @@ class RedisQueueMetricsService
 
         foreach ($queues as $queue) {
             try {
-                $pending = Redis::llen("queues:{$queue}");
-                $delayed = Redis::zcard("queues:{$queue}:delayed");
-                $reserved = Redis::zcard("queues:{$queue}:reserved");
+                $pending = Redis::llen("queues:$queue");
+                $delayed = Redis::zcard("queues:$queue:delayed");
+                $reserved = Redis::zcard("queues:$queue:reserved");
 
                 $rows[] = [
                     'queue' => $queue,

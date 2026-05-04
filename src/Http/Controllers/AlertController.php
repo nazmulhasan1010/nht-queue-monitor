@@ -13,10 +13,10 @@ class AlertController extends Controller
     /**
      * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('queue-monitor::alerts', [
-            'alerts' => QueueMonitorAlert::query()->latest()->paginate(30),
+            'alerts' => QueueMonitorAlert::latest()->paginate(30),
         ]);
     }
 
@@ -37,7 +37,7 @@ class AlertController extends Controller
      */
     public function resolve(int|string $id): RedirectResponse
     {
-        QueueMonitorAlert::query()->where('id', $id)->update([
+        QueueMonitorAlert::where('id', $id)->update([
             'resolved_at' => now(),
         ]);
 

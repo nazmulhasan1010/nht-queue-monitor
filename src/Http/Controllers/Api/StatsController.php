@@ -18,12 +18,7 @@ class StatsController extends Controller
         $days = (int) $request->get('days', 7);
         $start = Carbon::today()->subDays($days - 1);
 
-        $rows = DB::table('failed_jobs')
-            ->selectRaw('DATE(failed_at) as d, COUNT(*) as c')
-            ->whereDate('failed_at', '>=', $start)
-            ->groupBy('d')
-            ->orderBy('d')
-            ->get();
+        $rows = DB::table('failed_jobs')->selectRaw('DATE(failed_at) as d, COUNT(*) as c')->whereDate('failed_at', '>=', $start)->groupBy('d')->orderBy('d')->get();
 
         $map = [];
         for ($i=0; $i<$days; $i++) {

@@ -26,7 +26,7 @@ class AlertService
                 'failed_jobs_24h',
                 'critical',
                 'High failed jobs in last 24 hours',
-                "{$failed24h} failed jobs recorded in the last 24 hours.",
+                "$failed24h failed jobs recorded in the last 24 hours.",
                 ['count' => $failed24h]
             );
         }
@@ -36,7 +36,7 @@ class AlertService
                 'failed_jobs_1h',
                 'warning',
                 'High failed jobs in last hour',
-                "{$failed1h} failed jobs recorded in the last hour.",
+                "$failed1h failed jobs recorded in the last hour.",
                 ['count' => $failed1h]
             );
         }
@@ -54,7 +54,7 @@ class AlertService
      */
     protected function createOrUpdate(string $key, string $level, string $title, string $message, array $meta): QueueMonitorAlert
     {
-        return QueueMonitorAlert::query()->updateOrCreate(
+        return QueueMonitorAlert::updateOrCreate(
             ['alert_key' => $key, 'resolved_at' => null],
             [
                 'level' => $level,

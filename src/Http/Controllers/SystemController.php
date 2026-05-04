@@ -13,7 +13,7 @@ class SystemController extends Controller
      * @param RedisQueueMetricsService $redisMetrics
      * @return View
      */
-    public function index(RedisQueueMetricsService $redisMetrics)
+    public function index(RedisQueueMetricsService $redisMetrics): View
     {
         $queues = DB::table('failed_jobs')->distinct()->pluck('queue')->filter()->values()->all();
 

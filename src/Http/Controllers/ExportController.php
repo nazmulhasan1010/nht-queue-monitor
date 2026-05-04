@@ -51,7 +51,7 @@ class ExportController extends Controller
 
             fputcsv($out, ['id', 'event_type', 'job_id', 'queue', 'connection', 'job_name', 'performed_by', 'created_at']);
 
-            QueueMonitorEvent::query()->latest()->chunk(500, function ($rows) use ($out) {
+            QueueMonitorEvent::latest()->chunk(500, function ($rows) use ($out) {
                 foreach ($rows as $row) {
                     fputcsv($out, [
                         $row->id,

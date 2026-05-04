@@ -11,10 +11,10 @@ class EventController extends Controller
     /**
      * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('queue-monitor::events', [
-            'events' => QueueMonitorEvent::query()->latest()->paginate(30),
+            'events' => QueueMonitorEvent::latest()->paginate(30),
         ]);
     }
 }

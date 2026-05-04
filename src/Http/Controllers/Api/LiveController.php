@@ -21,15 +21,8 @@ class LiveController extends Controller
     public function index()
     {
         return response()->json([
-            'failed_jobs' => DB::table($this->table())
-                ->latest('failed_at')
-                ->limit(10)
-                ->get(),
-
-            'events' => DB::table('queue_monitor_events')
-                ->latest('created_at')
-                ->limit(10)
-                ->get(),
+            'failed_jobs' => DB::table($this->table())->latest('failed_at')->limit(10)->get(),
+            'events' => DB::table('queue_monitor_events')->latest('created_at')->limit(10)->get(),
         ]);
     }
 }

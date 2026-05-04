@@ -21,7 +21,9 @@
             <div class="qp-meta-row"><span>Tenant</span><span>{{ $job->tenant_id ?: '-' }}</span></div>
             <div class="qp-meta-row"><span>Attempts</span><span>{{ $job->attempts ?? '-' }}</span></div>
             <div class="qp-meta-row">
-                <span>Duration</span><span>{{ $job->duration_ms ? $job->duration_ms . ' ms' : '-' }}</span></div>
+                <span>Duration</span>
+                <span>{{ $job->duration_ms ? $job->duration_ms . ' ms' : '-' }}</span>
+            </div>
             <div class="qp-meta-row"><span>Finished At</span><span>{{ $job->finished_at ?: '-' }}</span></div>
         </div>
 
@@ -33,7 +35,7 @@
 
     <div class="qp-card" style="margin-top:16px;">
         <h2>Payload</h2>
-        <pre class="qp-code">{{ json_encode($job->payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
+        <pre class="qp-code">{{ json_encode($job->payload, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
     </div>
 
     @if($job->exception)

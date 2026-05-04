@@ -4,6 +4,7 @@ namespace NHT\QueueMonitor\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use JsonException;
 
 class QueueMonitorNotifier
 {
@@ -12,6 +13,7 @@ class QueueMonitorNotifier
      * @param string $message
      * @param array $meta
      * @return void
+     * @throws JsonException
      */
     public function notify(string $title, string $message, array $meta = []): void
     {
@@ -33,11 +35,12 @@ class QueueMonitorNotifier
      * @param string $message
      * @param array $meta
      * @return void
+     * @throws JsonException
      */
     protected function sendSlack(string $title, string $message, array $meta = []): void
     {
         Http::post(config('queue-monitor.notifications.slack_webhook_url'), [
-            'text' => "*{$title}*\n{$message}\n```" . json_encode($meta, JSON_PRETTY_PRINT) . "```",
+            'text' => "*$title*\n$message\n```" . json_encode($meta, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . "```",
         ]);
     }
 
@@ -46,10 +49,11 @@ class QueueMonitorNotifier
      * @param string $message
      * @param array $meta
      * @return void
+     * @throws JsonException
      */
     protected function sendMail(string $title, string $message, array $meta = []): void
     {
-        Mail::raw($message . "\n\n" . json_encode($meta, JSON_PRETTY_PRINT), function ($mail) use ($title) {
+        Mail::raw($message . "\n\n" . json_encode($meta, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT), function ($mail) use ($title) {
             $mail->to(config('queue-monitor.notifications.mail_to'))->subject($title);
         });
     }

@@ -73,6 +73,6 @@ class QueueMonitorServiceProvider extends ServiceProvider
 
         $this->publishes([__DIR__ . '/../config/queue-monitor.php' => config_path('queue-monitor.php')], 'queue-monitor-config');
         $this->publishes([__DIR__ . '/../database/migrations' => database_path('migrations')], '' . self::QUEUE_MONITOR_MIGRATIONS . '');
-        $this->publishes([__DIR__ . '/../public/vendor/queue-monitor' => public_path('vendor/nht/queue-monitor')], 'queue-monitor-assets');
+        $this->publishes([__DIR__ . '/../public/vendor/queue-monitor' => public_path('vendor/queue-monitor')], 'queue-monitor-assets');
     }
 }

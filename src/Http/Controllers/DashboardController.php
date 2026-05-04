@@ -12,7 +12,7 @@ class DashboardController extends Controller
      * @param QueueStatsService $statsService
      * @return View
      */
-    public function index(QueueStatsService $statsService)
+    public function index(QueueStatsService $statsService): View
     {
         return view('queue-monitor::dashboard', [
             'stats' => $statsService->summary(),

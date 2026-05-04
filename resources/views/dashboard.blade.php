@@ -38,36 +38,37 @@
         <div class="qp-card">
             <div class="qp-card-head">
                 <h2>Recent Failed Jobs</h2>
-                <a href="{{ route('queue-monitor.failed.index') }}" style="font-size: 13px; color: #ff3ea5;">View All Failed Jobs →</a>
+                <a href="{{ route('queue-monitor.failed.index') }}" style="font-size: 13px; color: #ff3ea5;">View All
+                    Failed Jobs →</a>
             </div>
-            
+
             <div class="qp-table-wrap">
                 <table class="qp-table">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Job Name</th>
-                            <th>Queue</th>
-                            <th>Failed At</th>
-                        </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Job Name</th>
+                        <th>Queue</th>
+                        <th>Failed At</th>
+                    </tr>
                     </thead>
                     <tbody id="qp-dashboard-recent">
-                        @forelse($latestFailedJobs as $job)
-                            @php
-                                $payload = json_decode($job->payload ?? '{}', true);
-                                $jobName = $payload['displayName'] ?? $payload['job'] ?? 'Unknown';
-                            @endphp
-                            <tr>
-                                <td class="qp-mono">#{{ $job->id }}</td>
-                                <td>{{ $jobName }}</td>
-                                <td><span class="qp-badge">{{ $job->queue }}</span></td>
-                                <td>{{ $job->failed_at }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="qp-empty">No failed jobs recorded yet.</td>
-                            </tr>
-                        @endforelse
+                    @forelse($latestFailedJobs as $job)
+                        @php
+                            $payload = json_decode($job->payload ?? '{}', true, 512, JSON_THROW_ON_ERROR);
+                            $jobName = $payload['displayName'] ?? $payload['job'] ?? 'Unknown';
+                        @endphp
+                        <tr>
+                            <td class="qp-mono">#{{ $job->id }}</td>
+                            <td>{{ $jobName }}</td>
+                            <td><span class="qp-badge">{{ $job->queue }}</span></td>
+                            <td>{{ $job->failed_at }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="qp-empty">No failed jobs recorded yet.</td>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
             </div>
@@ -78,58 +79,22 @@
                 <h2>Live Feed</h2>
             </div>
             <div id="qp-live-feed" class="qp-live-container">
-                <div class="qp-empty">Live feed is currently disabled. Toggle the switch at the top to start monitoring.</div>
+                <div class="qp-empty">Live feed is currently disabled. Toggle the switch at the top to start
+                    monitoring.
+                </div>
             </div>
         </div>
     </div>
-
-    <style>
-        .qp-live-container {
-            max-height: 480px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding-right: 5px;
-        }
-        .qp-live-container::-webkit-scrollbar {
-            width: 4px;
-        }
-        .qp-live-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 62, 165, 0.2);
-            border-radius: 10px;
-        }
-        .qp-live-item {
-            padding: 12px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-            border-left: 4px solid #ff3ea5;
-            font-size: 13px;
-            animation: qp-slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @keyframes qp-slide-in {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .qp-live-badge {
-            font-size: 10px;
-            padding: 2px 6px;
-            background: rgba(255, 77, 109, 0.2);
-            color: #ff9aac;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-    </style>
 
     <script>
         let liveEnabled = false;
         let liveInterval = null;
 
-        document.getElementById('qp-live-toggle').addEventListener('click', function() {
+        document.getElementById('qp-live-toggle').addEventListener('click', function () {
             liveEnabled = !liveEnabled;
             this.innerText = liveEnabled ? 'Live Feed: ON' : 'Live Feed: OFF';
             this.classList.toggle('qp-btn-secondary', !liveEnabled);
-            
+
             if (liveEnabled) {
                 startLive();
             } else {
@@ -153,22 +118,20 @@
             try {
                 const res = await fetch('{{ route('queue-monitor.api.live') }}');
                 const data = await res.json();
-                
+
                 const container = document.getElementById('qp-live-feed');
-                
+
                 if (data.failed_jobs.length === 0) {
                     container.innerHTML = '<div class="qp-empty">No recent failed jobs.</div>';
                     return;
                 }
 
-                // Smoothly update the list
                 const html = data.failed_jobs.map(job => {
                     const payload = JSON.parse(job.payload || '{}');
                     const name = payload.displayName || payload.job || 'Unknown';
                     const date = new Date(job.failed_at).toLocaleTimeString();
-                    
-                    return `
-                        <div class="qp-live-item">
+
+                    return ` <div class="qp-live-item">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                                 <strong style="color:#f8f7ff;">${name}</strong>
                                 <span class="qp-live-badge">#${job.id}</span>
@@ -177,8 +140,7 @@
                                 <span>${job.queue}</span>
                                 <span>${date}</span>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 }).join('');
 
                 if (container.innerHTML !== html) {

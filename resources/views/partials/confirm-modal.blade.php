@@ -20,42 +20,44 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.85);
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(12px);
 }
-.qp-modal {
-    background: #1e1e2e;
-    border: 1px solid #313244;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 400px;
-    padding: 24px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
-    animation: qp-modal-in 0.2s ease-out;
+.qp-modal-overlay .qp-modal {
+    background: linear-gradient(180deg, #1d1d38f2, #17172df2);
+    border: 1px solid rgba(255, 77, 166, 0.25);
+    border-radius: 24px;
+    width: 95%;
+    max-width: 440px;
+    padding: 32px;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+    animation: qp-modal-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 @keyframes qp-modal-in {
-    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
     to { opacity: 1; transform: scale(1) translateY(0); }
 }
 .qp-modal-header h3 {
-    margin: 0 0 12px 0;
-    color: #f5e0dc;
-    font-size: 1.25rem;
+    margin: 0 0 16px 0;
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
 }
 .qp-modal-body p {
-    margin: 0 0 24px 0;
-    color: #a6adc8;
-    line-height: 1.6;
-    font-size: 0.95rem;
+    margin: 0 0 32px 0;
+    color: #a5a3b8;
+    line-height: 1.7;
+    font-size: 1.05rem;
 }
 .qp-modal-footer {
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
+    gap: 16px;
 }
 </style>
 

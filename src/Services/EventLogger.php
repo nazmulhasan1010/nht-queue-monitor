@@ -17,7 +17,7 @@ class EventLogger
             return;
         }
 
-        QueueMonitorEvent::query()->create([
+        QueueMonitorEvent::create([
             'event_type' => $eventType,
             'job_id' => $data['job_id'] ?? null,
             'queue' => $data['queue'] ?? null,

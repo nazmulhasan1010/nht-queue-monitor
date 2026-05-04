@@ -10,7 +10,7 @@ class SettingsController extends Controller
     /**
      * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('queue-monitor::settings', [
             'config' => config('queue-monitor'),

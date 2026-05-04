@@ -12,7 +12,7 @@ class HealthController extends Controller
      * @param QueueHealthService $service
      * @return View
      */
-    public function index(QueueHealthService $service)
+    public function index(QueueHealthService $service): View
     {
         return view('queue-monitor::health', [
             'summary' => $service->summary(),

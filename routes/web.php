@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use NHT\QueueMonitor\Http\Controllers\AlertController;
+use NHT\QueueMonitor\Http\Controllers\Api\LiveController;
+use NHT\QueueMonitor\Http\Controllers\Api\StatsController;
 use NHT\QueueMonitor\Http\Controllers\DashboardController;
 use NHT\QueueMonitor\Http\Controllers\EventController;
 use NHT\QueueMonitor\Http\Controllers\ExportController;
@@ -20,6 +22,8 @@ Route::group([
     Route::get('/failed', [FailedJobController::class, 'index'])->name('queue-monitor.failed.index');
     Route::get('/failed/{id}', [FailedJobController::class, 'show'])->name('queue-monitor.failed.show');
     Route::post('/failed/{id}/retry', [FailedJobController::class, 'retry'])->name('queue-monitor.failed.retry');
+    Route::post('/failed/{id}/retry-with-data', [FailedJobController::class, 'retryWithData'])->name('queue-monitor.failed.retry-with-data');
+    Route::post('/failed/{id}/analyze', [FailedJobController::class, 'analyze'])->name('queue-monitor.failed.analyze');
     Route::post('/failed/retry-all', [FailedJobController::class, 'retryAll'])->name('queue-monitor.failed.retry-all');
     Route::delete('/failed/{id}', [FailedJobController::class, 'destroy'])->name('queue-monitor.failed.destroy');
     Route::delete('/failed-clear/all', [FailedJobController::class, 'clear'])->name('queue-monitor.failed.clear');
@@ -43,6 +47,6 @@ Route::group([
     Route::get('/exports/events', [ExportController::class, 'events'])->name('queue-monitor.exports.events');
 
     // API Routes
-    Route::get('/api/live', [\NHT\QueueMonitor\Http\Controllers\Api\LiveController::class, 'index'])->name('queue-monitor.api.live');
-    Route::get('/api/trend', [\NHT\QueueMonitor\Http\Controllers\Api\StatsController::class, 'trend'])->name('queue-monitor.api.trend');
+    Route::get('/api/live', [LiveController::class, 'index'])->name('queue-monitor.api.live');
+    Route::get('/api/trend', [StatsController::class, 'trend'])->name('queue-monitor.api.trend');
 });
