@@ -287,6 +287,13 @@ input[type="checkbox"] {
   box-shadow: none;
 }
 
+.qp-btn-success {
+  background: rgba($qp-success, .12);
+  color: color.scale($qp-success, $lightness: 18%);
+  border: 1px solid rgba($qp-success, .3);
+  box-shadow: none;
+}
+
 .qp-actions {
   display: flex;
   align-items: center;

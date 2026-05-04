@@ -347,6 +347,13 @@ input[type="checkbox"] {
         border: 1px solid $danger-border;
         box-shadow: none;
     }
+
+    &-success {
+        background: $success-bg;
+        color: $success;
+        border: 1px solid $success-border;
+        box-shadow: none;
+    }
 }
 
 .qp-actions {

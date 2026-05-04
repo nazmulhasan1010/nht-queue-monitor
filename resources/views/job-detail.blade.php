@@ -18,7 +18,9 @@
             @endif
 
             @if(config('queue-monitor.allow_retry', true))
-                <button class="qp-btn" onclick="document.getElementById('qp-edit-modal').classList.remove('d-none')">Edit & Retry</button>
+                <button class="qp-btn" onclick="document.getElementById('qp-edit-modal').classList.remove('d-none')">
+                    Edit & Retry
+                </button>
                 <form action="{{ route('queue-monitor.failed.retry', $job->id) }}" method="POST">
                     @csrf
                     <button class="qp-btn" type="submit">Retry Job</button>
@@ -114,7 +116,8 @@
                             <div class="qp-flow-status"></div>
                             <div class="qp-flow-content">
                                 <div class="qp-flow-name">{{ $bJob->job_name }}</div>
-                                <div class="qp-flow-meta">{{ $bJob->status }} • {{ $bJob->finished_at->diffForHumans() }}</div>
+                                <div class="qp-flow-meta">{{ $bJob->status }}
+                                    • {{ $bJob->finished_at->diffForHumans() }}</div>
                             </div>
                         </div>
                     @endforeach
@@ -150,13 +153,16 @@
                     <h2>Edit Job Payload</h2>
                     <p>Modify the JSON data before retrying the job.</p>
                 </div>
-                <button class="qp-btn qp-btn-sm" onclick="document.getElementById('qp-edit-modal').classList.add('d-none')">Cancel</button>
+                <button class="qp-btn qp-btn-sm"
+                        onclick="document.getElementById('qp-edit-modal').classList.add('d-none')">Cancel
+                </button>
             </div>
-            
+
             <form action="{{ route('queue-monitor.failed.retry-with-data', $job->id) }}" method="POST">
                 @csrf
-                <textarea name="payload" class="qp-code qp-code-large" style="width: 100%; min-height: 400px; margin-bottom: 20px;">{{ json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</textarea>
-                
+                <textarea name="payload" class="qp-code qp-code-large"
+                          style="width: 100%; min-height: 400px; margin-bottom: 20px;">{{ json_encode($payload, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</textarea>
+
                 <div class="qp-actions" style="justify-content: flex-end;">
                     <button type="submit" class="qp-btn qp-btn-primary">Update & Retry Now</button>
                 </div>

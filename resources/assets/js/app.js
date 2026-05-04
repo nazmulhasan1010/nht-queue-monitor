@@ -66,6 +66,44 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Tabs Logic
+    document.querySelectorAll('[data-qp-tab-button]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.getAttribute('data-qp-tab-button');
+            const container = btn.closest('.qp-tabs-card');
+            
+            // Update buttons
+            container.querySelectorAll('[data-qp-tab-button]').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Update panels
+            container.querySelectorAll('[data-qp-tab-panel]').forEach(panel => {
+                panel.classList.toggle('active', panel.getAttribute('data-qp-tab-panel') === tabId);
+            });
+        });
+    });
+
+    // Copy to Clipboard
+    document.querySelectorAll('[data-qp-copy]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const selector = btn.getAttribute('data-qp-copy');
+            const target = document.querySelector(selector);
+            if (!target) return;
+
+            const text = target.innerText || target.value;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied!';
+                btn.classList.add('qp-btn-success');
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('qp-btn-success');
+                }, 2000);
+            });
+        });
+    });
 });
 
 function updateLiveFeed(data) {

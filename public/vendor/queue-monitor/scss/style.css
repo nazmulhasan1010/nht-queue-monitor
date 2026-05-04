@@ -265,6 +265,12 @@ input[type=checkbox] {
   border: 1px solid rgba(244, 63, 94, 0.32);
   box-shadow: none;
 }
+.qp-btn-success {
+  background: rgba(34, 197, 94, 0.12);
+  color: #86efac;
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  box-shadow: none;
+}
 
 .qp-actions {
   display: flex;
