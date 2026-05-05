@@ -29,6 +29,12 @@ Route::group([
     Route::delete('/failed-clear/all', [FailedJobController::class, 'clear'])->name('queue-monitor.failed.clear');
     Route::delete('/failed-bulk/delete', [FailedJobController::class, 'bulkDestroy'])->name('queue-monitor.failed.bulk-destroy');
 
+    Route::get('/pending', [\NHT\QueueMonitor\Http\Controllers\PendingJobController::class, 'index'])->name('queue-monitor.pending.index');
+    Route::get('/pending/{id}', [\NHT\QueueMonitor\Http\Controllers\PendingJobController::class, 'show'])->name('queue-monitor.pending.show');
+    Route::post('/pending/{id}/run', [\NHT\QueueMonitor\Http\Controllers\PendingJobController::class, 'run'])->name('queue-monitor.pending.run');
+    Route::delete('/pending/{id}', [\NHT\QueueMonitor\Http\Controllers\PendingJobController::class, 'destroy'])->name('queue-monitor.pending.destroy');
+    Route::delete('/pending-clear/all', [\NHT\QueueMonitor\Http\Controllers\PendingJobController::class, 'clear'])->name('queue-monitor.pending.clear');
+
     Route::get('/jobs', [JobHistoryController::class, 'index'])->name('queue-monitor.jobs.index');
     Route::get('/jobs/{id}', [JobHistoryController::class, 'show'])->name('queue-monitor.jobs.show');
 

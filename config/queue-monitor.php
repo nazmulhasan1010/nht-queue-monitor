@@ -3,6 +3,7 @@
 return [
     'enabled' => env('QUEUE_MONITOR_ENABLED', true),
     'route_prefix' => env('QUEUE_MONITOR_ROUTE_PREFIX', 'queue-monitor'),
+    'queue_jobs_table' => 'jobs',
 
     'middleware' => [
 //        'web',
@@ -16,6 +17,8 @@ return [
     'allow_delete' => true,
     'allow_clear' => true,
     'allow_bulk_delete' => true,
+    'allow_run' => true,
+    'allow_pending_delete' => true,
     'allow_export' => true,
 
     'node' => [

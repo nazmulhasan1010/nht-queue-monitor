@@ -103,3 +103,40 @@ function updateLiveFeed(data) {
         container.appendChild(div);
     });
 }
+
+// Global utilities
+window.qpConfirm = function(message, form, btnText = 'Confirm Action', btnClass = 'qp-btn-danger') {
+    const modal = document.getElementById('qp-confirm-modal');
+    if (!modal) return true;
+
+    const msgEl = document.getElementById('qp-confirm-message');
+    const btnEl = document.getElementById('qp-confirm-btn');
+    
+    if (msgEl) msgEl.innerText = message;
+    if (btnEl) {
+        btnEl.innerText = btnText;
+        btnEl.className = 'qp-btn ' + btnClass;
+    }
+    
+    modal.style.display = 'flex';
+    window.qpPendingForm = form;
+    return false;
+};
+
+window.qpCloseConfirm = function() {
+    const modal = document.getElementById('qp-confirm-modal');
+    if (modal) modal.style.display = 'none';
+    window.qpPendingForm = null;
+};
+
+document.addEventListener('click', (e) => {
+    if (e.target.id === 'qp-confirm-btn') {
+        if (window.qpPendingForm) {
+            window.qpPendingForm.submit();
+        }
+        window.qpCloseConfirm();
+    }
+    if (e.target.classList.contains('qp-modal-overlay')) {
+        window.qpCloseConfirm();
+    }
+});

@@ -288,6 +288,12 @@ input[type=checkbox] {
   color: #86efac;
 }
 
+.qp-toast-danger {
+  border-color: rgba(244, 63, 94, 0.32);
+  background: rgba(244, 63, 94, 0.12);
+  color: #fda4af;
+}
+
 .qp-code {
   white-space: pre-wrap;
   word-break: break-word;

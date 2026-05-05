@@ -370,6 +370,12 @@ input[type="checkbox"] {
     border: 1px solid $success-border;
     background: $success-bg;
     color: $success;
+
+    &-danger {
+        border-color: $danger-border;
+        background: $danger-bg;
+        color: $danger;
+    }
 }
 
 .qp-code {

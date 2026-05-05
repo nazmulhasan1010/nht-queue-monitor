@@ -308,6 +308,12 @@ input[type="checkbox"] {
   border: 1px solid rgba($qp-success, .25);
   background: rgba($qp-success, .10);
   color: color.scale($qp-success, $lightness: 20%);
+
+  &.qp-toast-danger {
+    border-color: rgba($qp-danger, .25);
+    background: rgba($qp-danger, .10);
+    color: color.scale($qp-danger, $lightness: 20%);
+  }
 }
 
 .qp-code {

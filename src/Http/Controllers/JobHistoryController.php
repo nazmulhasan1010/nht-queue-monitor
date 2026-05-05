@@ -29,9 +29,7 @@ class JobHistoryController extends Controller
             $term = '%' . $request->get('q') . '%';
 
             $query->where(function ($q) use ($term) {
-                $q->where('job_name', 'like', $term)
-                    ->orWhere('uuid', 'like', $term)
-                    ->orWhere('exception', 'like', $term);
+                $q->where('job_name', 'like', $term)->orWhere('uuid', 'like', $term)->orWhere('exception', 'like', $term);
             });
         }
 

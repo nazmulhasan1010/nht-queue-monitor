@@ -17,6 +17,14 @@
             <div class="qp-toast">{{ session('queue_monitor_success') }}</div>
         @endif
 
+        @if(isset($errors) && $errors->any())
+            <div class="qp-toast qp-toast-danger">
+                @foreach($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
+
         @yield('content')
     </main>
 </div>

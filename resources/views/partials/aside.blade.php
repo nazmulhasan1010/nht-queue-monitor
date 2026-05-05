@@ -11,6 +11,8 @@
            class="{{ request()->routeIs('queue-monitor.dashboard') ? 'active' : '' }}"><span>Dashboard</span><span>→</span></a>
         <a href="{{ route('queue-monitor.failed.index') }}"
            class="{{ request()->routeIs('queue-monitor.failed.*') ? 'active' : '' }}"><span>Failed Jobs</span><span>→</span></a>
+        <a href="{{ route('queue-monitor.pending.index') }}"
+           class="{{ request()->routeIs('queue-monitor.pending.*') ? 'active' : '' }}"><span>Pending Jobs</span><span>→</span></a>
         <a href="{{ route('queue-monitor.jobs.index') }}"
            class="{{ request()->routeIs('queue-monitor.jobs.*') ? 'active' : '' }}"><span>Jobs History</span><span>→</span></a>
         <a href="{{ route('queue-monitor.health.index') }}"

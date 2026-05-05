@@ -61,39 +61,8 @@
 }
 </style>
 
+@once
 <script>
-let qpPendingForm = null;
-
-function qpConfirm(message, form, btnText = 'Confirm Action', btnClass = 'qp-btn-danger') {
-    const modal = document.getElementById('qp-confirm-modal');
-    const msgEl = document.getElementById('qp-confirm-message');
-    const btnEl = document.getElementById('qp-confirm-btn');
-    
-    msgEl.innerText = message;
-    btnEl.innerText = btnText;
-    
-    // Reset button classes
-    btnEl.className = 'qp-btn ' + btnClass;
-    
-    modal.style.display = 'flex';
-    qpPendingForm = form;
-    return false;
-}
-
-function qpCloseConfirm() {
-    document.getElementById('qp-confirm-modal').style.display = 'none';
-    qpPendingForm = null;
-}
-
-document.getElementById('qp-confirm-btn')?.addEventListener('click', function() {
-    if (qpPendingForm) {
-        qpPendingForm.submit();
-    }
-    qpCloseConfirm();
-});
-
-// Close on escape
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') qpCloseConfirm();
-});
+    // qpConfirm is now handled in app.js
 </script>
+@endonce

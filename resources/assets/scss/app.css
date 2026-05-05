@@ -295,6 +295,11 @@ input[type=checkbox] {
   background: rgba(65, 211, 146, 0.1);
   color: rgb(103, 219.8, 167.8);
 }
+.qp-toast.qp-toast-danger {
+  border-color: rgba(255, 77, 109, 0.25);
+  background: rgba(255, 77, 109, 0.1);
+  color: rgb(255, 112.6, 138.2);
+}
 
 .qp-code {
   white-space: pre-wrap;
